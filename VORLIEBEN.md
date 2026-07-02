@@ -31,6 +31,7 @@
 
 ## Kochen
 - Maik ist **Koch-Anfänger**: Zubereitungsschritte detailliert schreiben – konkrete Würzmengen (z. B. „½ TL Salz, 1 TL Paprikapulver"), Hitzestufen, Garzeiten und Woran-erkenne-ich-dass-es-fertig-ist-Hinweise.
+- **Meal-Prep = doppelte Portion:** Ist ein Gericht an einem späteren Tag als „(Meal-Prep)" eingeplant, muss beim Kochen des Originals die doppelte Menge gekocht werden. Der Koch-Modus zeigt dafür automatisch einen „Doppelte Portion kochen!"-Hinweis auf dem Basisgericht (die Einkaufsliste rechnet die doppelten Zutaten bereits ein). Bei neuen Gerichten/Plänen immer daran denken.
 - **Keine vagen Angaben** wie „Salat mit Öl-Dressing dazu": immer ausschreiben, welcher Salat (z. B. „2 Handvoll Blattsalat") und welches Dressing mit Mengen (z. B. „1 EL Öl, 1 TL Essig, 1 Prise Salz und Zucker"). Gilt für alle Beilagen, Dips und Dressings.
 
 ## Wöchentliche Routine (samstags morgens)
@@ -47,6 +48,7 @@
 ## App-Konventionen (Wochenplan, Netlify)
 - App heißt **„Wochenplan"** (früher „Wochenküche").
 - Tabs: Plan · Heute · Kochen · Plan bearbeiten · Einkaufsliste · Vorräte · Nährstoffe (kein „Fragen"-Chat-Tab).
+- „Plan speichern" in „Plan bearbeiten" **setzt alle Abendessen-Verschiebungen zurück** (overrides_v1 wird geleert) – der neu gespeicherte Plan gilt, sonst würden alte Verschiebungen ihn auf der Plan-Seite überdecken. Abendessen-Tausch (⇄) läuft komplett über „Plan bearbeiten" und wird dauerhaft in plan_v4 gespeichert.
 - Plan: vergangene Wochentage ausblenden; datumsbasiert mit „↷ Verschieben" **pro Mahlzeit getrennt**: Abendessen kaskadiert einen Tag nach hinten (ggf. in die nächste Woche), Frühstück/Mittag werden für den Tag ausgesetzt (slotskips_v1). Kochen: Gericht des aktuellen Tages vorauswählen.
 - **Nicht verschoben = gegessen:** Ab dem Folgetag werden nicht verschobene Mahlzeiten automatisch als gegessen verbucht (Nährstoffe + Vorrats-Abzug, `finalized_v1` merkt den Stand). „Heute": manuelles Abhaken/Korrigieren, auch für vergangene Tage, + freies Essen mit Nährwerten eintragen.
 - „Vorräte": Einkäufe erfassen; beim Abhaken werden Rezept-Zutaten abgezogen.
