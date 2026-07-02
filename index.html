@@ -671,8 +671,9 @@ function renderShop(){
 }
 function targetFor(k){ if(k==='kcal') return 2100; if(k==='protein') return Math.round(weight*1.5); return RI[k][1]; }
 let nutriMode='plan';
+let nutriFrom=addDays(todayISO(),-6), nutriTo=todayISO();
 function renderNutri(){
-  const modes=[['plan','📋 Plan (Soll)'],['day','Heute'],['week','Ø 7 Tage'],['month','Ø 30 Tage']];
+  const modes=[['plan','📋 Plan (Soll)'],['day','Heute'],['week','Ø 7 Tage'],['month','Ø 30 Tage'],['range','📅 Zeitraum wählen']];
   let day={}, note='', entries=1;
   if(nutriMode==='plan'){
     const dinAvg={kcal:0,protein:0,fiber:0,iron:0,calcium:0,vitc:0};
@@ -680,6 +681,13 @@ function renderNutri(){
     const b=DISHES[plan.breakfast].nutri, l=DISHES[plan.lunch].nutri;
     for(const k in RI){ day[k]=dinAvg[k]+b[k]+l[k]; }
     note='Ø pro Tag laut Plan (Frühstück + Mittag + Abendessen).';
+  }else if(nutriMode==='range'){
+    if(nutriFrom>nutriTo){const t=nutriFrom; nutriFrom=nutriTo; nutriTo=t;}
+    const dates=[]; let cur=nutriFrom; while(cur<=nutriTo){dates.push(cur); cur=addDays(cur,1);}
+    entries=0; for(const k in RI) day[k]=0;
+    dates.forEach(dt=>{(log[dt]||[]).forEach(e=>{entries++; for(const k in RI) day[k]+=(e.nutri&&e.nutri[k])||0;});});
+    for(const k in RI) day[k]/=dates.length;
+    note='Ø pro Tag von '+nutriFrom.slice(8,10)+'.'+nutriFrom.slice(5,7)+'. bis '+nutriTo.slice(8,10)+'.'+nutriTo.slice(5,7)+'. ('+dates.length+' Tage), berechnet aus deinen abgehakten Mahlzeiten.';
   }else{
     const n=nutriMode==='day'?1:(nutriMode==='week'?7:30);
     entries=0; for(const k in RI) day[k]=0;
@@ -688,6 +696,7 @@ function renderNutri(){
     note=nutriMode==='day'?'Heute tatsächlich gegessen (unter „Heute" abgehakt).':'Ø pro Tag über die letzten '+n+' Tage, berechnet aus deinen abgehakten Mahlzeiten.';
   }
   const chips=modes.map(m=>'<button class="chip" data-mode="'+m[0]+'"'+(nutriMode===m[0]?' style="background:var(--green);color:#fff"':'')+'>'+m[1]+'</button>').join('');
+  const rangeBox=nutriMode==='range'?'<div class="generate" style="align-items:flex-end;gap:12px;flex-wrap:wrap"><label style="font-size:12px;color:var(--muted)">Von<br><input id="nFrom" type="date" value="'+nutriFrom+'" max="'+todayISO()+'" style="font-family:var(--body);font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></label><label style="font-size:12px;color:var(--muted)">Bis<br><input id="nTo" type="date" value="'+nutriTo+'" max="'+todayISO()+'" style="font-family:var(--body);font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></label></div>':'';
   const bars=Object.keys(RI).map(k=>{ const label=RI[k][0],unit=RI[k][2],ri=targetFor(k); const pct=Math.round(day[k]/ri*100); const w=Math.min(100,pct); const cls=pct>=95?'full':'';
     return '<div class="nutrow"><div class="top"><span class="nm">'+label+'</span><span class="vl">'+Math.round(day[k])+' / '+ri+' '+unit+' · '+pct+'%</span></div><div class="bar"><span class="'+cls+'" style="width:'+w+'%"></span></div></div>';}).join('');
   const empty=(nutriMode!=='plan'&&entries===0)?'<div class="infobar"><i>ℹ️</i><div>Noch keine Daten in diesem Zeitraum – hak unter „Heute" ab, was du isst, dann füllt sich die Auswertung.</div></div>':'';
@@ -695,9 +704,12 @@ function renderNutri(){
   const callout=nutriMode==='plan'
     ?'<div class="callout">Mit deinem aktuellen Plan liegst du bei rund '+Math.round(day.kcal)+' kcal und '+Math.round(day.protein)+' g Eiweiß pro Tag. Grobe Schätzwerte, keine individuelle Ernährungsberatung.</div>'
     :'<div class="callout">'+entries+' Einträge im Zeitraum. Extra-Essen zählt nur mit den Werten, die du beim Eintragen angegeben hast.</div>';
-  app.innerHTML='<section class="view"><p class="eyebrow">Ganzer Tag</p><h2 class="section">Nährstoff-Deckung</h2><p class="lead">Ziel: rund 2100 kcal und '+Math.round(weight*1.5)+' g Eiweiß (1,5 g/kg) pro Tag. '+note+'</p><div class="chips">'+chips+'</div>'+empty+weightBox
+  app.innerHTML='<section class="view"><p class="eyebrow">Ganzer Tag</p><h2 class="section">Nährstoff-Deckung</h2><p class="lead">Ziel: rund 2100 kcal und '+Math.round(weight*1.5)+' g Eiweiß (1,5 g/kg) pro Tag. '+note+'</p><div class="chips">'+chips+'</div>'+rangeBox+empty+weightBox
     +'<div class="nutbars">'+bars+'</div>'+callout+'</section>';
   app.querySelectorAll('[data-mode]').forEach(c=>c.onclick=()=>{nutriMode=c.dataset.mode; renderNutri();});
+  const nf=app.querySelector('#nFrom'), nt=app.querySelector('#nTo');
+  if(nf) nf.onchange=()=>{nutriFrom=nf.value; renderNutri();};
+  if(nt) nt.onchange=()=>{nutriTo=nt.value; renderNutri();};
   const wi=app.querySelector('#wIn'); if(wi) wi.onchange=async()=>{ let v=parseInt(wi.value,10); if(!v||v<40)v=40; if(v>160)v=160; weight=v; await store('weight_v4',weight); renderNutri(); };
 }
 
