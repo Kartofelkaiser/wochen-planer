@@ -20,7 +20,6 @@
 
 ## Geschmack / konkrete Vorlieben
 - Isst alles (keine Unverträglichkeiten bekannt).
-- **Hackfleisch-Bolognese lieber als Linsen-Bolognese.**
 - Deutsche Alltagsküche + gängige internationale Gerichte funktionieren gut (Dal, Curry, Tortilla, Enchiladas, Käsespätzle, Erbseneintopf …).
 
 ## Einkaufsliste
