@@ -83,6 +83,8 @@
   .opt .oc{padding:10px 12px 12px;}
   .opt .on{font-family:var(--display); font-weight:600; font-size:14.5px; line-height:1.2;}
   .opt .od{font-size:12px; color:var(--muted); margin-top:3px;}
+  .opt .ingbtn{font-size:12px;font-weight:500;color:var(--green-d);margin-top:7px;cursor:pointer;}
+  .opt .inglist{font-size:12px;color:var(--muted);margin-top:6px;border-top:1px dashed var(--line);padding-top:6px;line-height:1.65;}
   .savebar{position:sticky; bottom:0; background:rgba(251,250,247,0.95); backdrop-filter:blur(8px); border-top:1px solid var(--line); padding:14px 0; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin-top:8px;}
   .savebar .note{font-size:13px; color:var(--muted);}
   .cooklayout{display:grid; grid-template-columns:240px 1fr; gap:20px; align-items:start;}
@@ -170,7 +172,6 @@
     <button role="tab" data-view="shop" aria-selected="false"><i>🛒</i>Einkaufsliste</button>
     <button role="tab" data-view="pantry" aria-selected="false"><i>🧺</i>Vorräte</button>
     <button role="tab" data-view="nutri" aria-selected="false"><i>🥗</i>Nährstoffe</button>
-    <button role="tab" data-view="chat" aria-selected="false"><i>💬</i>Fragen</button>
   </nav>
 </div></header>
 <div class="wrap"><main id="app"></main></div>
@@ -233,6 +234,9 @@ const DISHES={
   'linsen-dal':{meal:'d',name:'Rotes Linsen-Dal mit Reis & Joghurt',illo:'curry',photo:MDB('wuxrtu1483564410.jpg'),time:'30 Min',price:1.80,tags:['Eisen','Ballaststoffe','Meal-Prep'],batch:'2–3-fache Menge kochen – ergibt die Reste für Freitag und friert gut ein.',nutri:{kcal:850,protein:34,fiber:17,iron:8,calcium:250,vitc:40},ing:[['rote Linsen',150,'g','vorrat'],['Zwiebel',1,'','gemuese'],['Knoblauch',2,'Zehen','gemuese'],['Ingwer',1,'Stück','gemuese'],['Kokosmilch',150,'ml','vorrat'],['passierte Tomaten',200,'g','vorrat'],['Curry & Kurkuma',null,'','staple'],['Reis',90,'g','vorrat'],['Naturjoghurt',100,'g','kuehl'],['Öl & Salz',null,'','staple']],steps:['Zwiebel, Knoblauch und Ingwer anbraten, Gewürze mitrösten.','Linsen, Tomaten, Kokosmilch und ~300 ml Wasser zugeben.','15–20 Min köcheln, salzen.','Reis kochen, mit Joghurt-Klecks servieren.']},
   'kaesespaetzle':{meal:'d',name:'Käsespätzle mit Röstzwiebeln & Salat',illo:'pasta',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/K%C3%A4sesp%C3%A4tzle_mit_Zwiebeln_und_Beilagensalat.JPG/500px-K%C3%A4sesp%C3%A4tzle_mit_Zwiebeln_und_Beilagensalat.JPG',time:'25 Min',price:2.30,tags:['Calcium','Wohlfühlessen'],nutri:{kcal:880,protein:34,fiber:5,iron:2.5,calcium:550,vitc:25},ing:[['Spätzle (Kühlregal)',250,'g','kuehl'],['Bergkäse oder Gouda',80,'g','kuehl'],['Zwiebeln',2,'','gemuese'],['Blattsalat & Gurke',1,'Portion','gemuese'],['Butter',null,'','staple'],['Salz & Pfeffer',null,'','staple']],steps:['Zwiebelringe in Butter langsam goldbraun rösten.','Spätzle in der Pfanne erhitzen, Käse portionsweise unterheben.','Mit Röstzwiebeln und angemachtem Salat servieren.']},
   'fischstaebchen':{meal:'d',name:'Fischstäbchen mit Kartoffelpüree & Erbsen',illo:'fish',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Fish_fingers_as_a_convenience_food.jpg/500px-Fish_fingers_as_a_convenience_food.jpg',time:'25 Min',price:2.60,tags:['Schnell','Klassiker'],nutri:{kcal:840,protein:38,fiber:10,iron:3,calcium:250,vitc:40},ing:[['Fischstäbchen',8,'','tk'],['Kartoffeln',400,'g','gemuese'],['Milch',100,'ml','kuehl'],['TK-Erbsen',200,'g','tk'],['Zitrone',0.5,'','gemuese'],['Butter',null,'','staple'],['Salz & Muskat',null,'','staple']],steps:['Kartoffeln weich kochen und mit Milch und Butter zu Püree stampfen.','Fischstäbchen in der Pfanne oder im Ofen knusprig garen.','Erbsen garen, alles mit Zitrone servieren.']},
+  'kartoffelgratin':{meal:'d',name:'Kartoffelgratin mit Hähnchen & Salat',illo:'potato',photo:MDB('qwrtut1468418027.jpg'),time:'50 Min',price:2.80,tags:['Calcium','Ofen'],nutri:{kcal:860,protein:46,fiber:8,iron:3.5,calcium:450,vitc:45},ing:[['Kartoffeln',350,'g','gemuese'],['Hähnchenbrust',150,'g','kuehl'],['Milch',150,'ml','kuehl'],['Sahne oder Kochcreme',100,'ml','kuehl'],['Käse (gerieben)',60,'g','kuehl'],['Knoblauch',1,'Zehe','gemuese'],['Blattsalat',1,'Portion','gemuese'],['Salz, Pfeffer & Muskat',null,'','staple']],steps:['Ofen auf 200 °C, Kartoffeln in dünne Scheiben hobeln.','Hähnchen würfeln und kurz anbraten.','Kartoffeln und Hähnchen in eine Form schichten, gewürzte Milch-Sahne angießen.','Käse darüber, 35–40 Min backen, mit Salat servieren.']},
+  'enchiladas':{meal:'d',name:'Überbackene Hähnchen-Enchiladas',illo:'sheet',photo:MDB('qtuwxu1468233098.jpg'),time:'40 Min',price:2.90,tags:['Eiweiß','Ofen'],nutri:{kcal:870,protein:48,fiber:10,iron:4,calcium:400,vitc:70},ing:[['Vollkorn-Wraps',2,'','vorrat'],['Hähnchenbrust',150,'g','kuehl'],['Kidneybohnen',0.5,'Dose','vorrat'],['Mais',0.5,'Dose','vorrat'],['passierte Tomaten',250,'g','vorrat'],['Paprika',1,'','gemuese'],['Zwiebel',1,'','gemuese'],['Käse (gerieben)',60,'g','kuehl'],['Chili & Kreuzkümmel',null,'','staple'],['Öl',null,'','staple']],steps:['Hähnchen, Zwiebel und Paprika anbraten, Bohnen, Mais und die Hälfte der Tomaten dazu, würzen.','Wraps füllen, rollen und in eine Form legen.','Restliche Tomaten darübergießen, Käse draufstreuen.','Bei 200 °C ~15 Min überbacken.']},
+  'schinkennudeln':{meal:'d',name:'Schinkennudeln mit Ei & Gurkensalat',illo:'pasta',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Schinkennudeln.jpg/500px-Schinkennudeln.jpg',time:'20 Min',price:2.00,tags:['Schnell','Günstig'],nutri:{kcal:840,protein:38,fiber:7,iron:3.5,calcium:250,vitc:25},ing:[['Nudeln',140,'g','vorrat'],['Kochschinken',80,'g','kuehl'],['Eier',2,'','kuehl'],['Zwiebel',1,'','gemuese'],['Käse (gerieben)',40,'g','kuehl'],['Gurke',0.5,'','gemuese'],['Naturjoghurt',100,'g','kuehl'],['Öl',null,'','staple'],['Salz & Pfeffer',null,'','staple']],steps:['Nudeln kochen.','Zwiebel und Schinkenwürfel anbraten, Nudeln dazu.','Verquirlte Eier darübergießen und stocken lassen, Käse unterheben.','Gurkensalat mit Joghurt anmachen.']},
   'dal-rest':{meal:'d',name:'Linsen-Dal (Reste vom Donnerstag)',illo:'curry',photo:MDB('wuxrtu1483564410.jpg'),time:'15 Min',price:0.60,tags:['Meal-Prep','Schnell'],leftoverOf:'linsen-dal',nutri:{kcal:850,protein:34,fiber:17,iron:8,calcium:250,vitc:40},ing:[['Reis',90,'g','vorrat'],['Naturjoghurt',100,'g','kuehl']],steps:['Dal-Reste erwärmen.','Frischen Reis kochen.','Mit Joghurt-Klecks servieren.']},
   'tortilla':{meal:'d',name:'Spanische Tortilla mit Paprika-Salat',illo:'eggs',photo:MDB('quuxsx1511476154.jpg'),time:'30 Min',price:1.80,tags:['Vegetarisch','Günstig'],nutri:{kcal:820,protein:32,fiber:8,iron:4,calcium:220,vitc:90},ing:[['Kartoffeln',350,'g','gemuese'],['Eier',4,'','kuehl'],['Zwiebel',1,'','gemuese'],['Paprika',1,'','gemuese'],['Blattsalat',1,'Portion','gemuese'],['Olivenöl',null,'','staple'],['Salz & Pfeffer',null,'','staple']],steps:['Kartoffelscheiben in Öl weich braten, Zwiebel dazu.','Verquirlte Eier darübergießen und bei kleiner Hitze stocken lassen.','Mit dem Teller-Trick wenden und fertig garen.','Paprika-Salat anmachen und dazu servieren.']},
   'nudelauflauf':{meal:'d',name:'Brokkoli-Nudelauflauf mit Käse & Schinken',illo:'pasta',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Nudelauflauf.JPG/500px-Nudelauflauf.JPG',time:'40 Min',price:2.30,tags:['Calcium','Einfrierbar'],nutri:{kcal:860,protein:40,fiber:9,iron:3.5,calcium:450,vitc:90},ing:[['Nudeln',120,'g','vorrat'],['Brokkoli',300,'g','gemuese'],['Kochschinken',50,'g','kuehl'],['Milch',150,'ml','kuehl'],['Frischkäse',50,'g','kuehl'],['Käse (gerieben)',60,'g','kuehl'],['Salz, Pfeffer & Muskat',null,'','staple']],steps:['Nudeln und Brokkoli-Röschen vorkochen, Ofen auf 200 °C.','Milch mit Frischkäse zur Sauce verrühren, würzen.','Alles mit Schinkenwürfeln mischen und in eine Form geben.','Käse darüber und 20 Min überbacken.']},
@@ -248,7 +252,7 @@ const DINNER_OPTIONS={
   Montag:['hack-bolo','lachs-ofen','haehnchen-curry'],
   Dienstag:['haehnchen-reis','ofengemuese','ofenkartoffel'],
   Mittwoch:['hack-bolo-rest','shakshuka','gebratener-reis'],
-  Donnerstag:['linsen-dal','kaesespaetzle','fischstaebchen'],
+  Donnerstag:['linsen-dal','kaesespaetzle','fischstaebchen','kartoffelgratin','enchiladas','schinkennudeln'],
   Freitag:['dal-rest','tortilla','nudelauflauf'],
   Samstag:['erbseneintopf','pizza','geschnetzeltes'],
   Sonntag:['lasagne','gefuellte-zucchini','teriyaki-haehnchen']
@@ -279,7 +283,7 @@ async function load(k,fb){
 }
 let plan={dinners:Object.assign({},DEFAULT_DINNERS),breakfast:'b-pancakes',lunch:'l-bowl'};
 let draft=JSON.parse(JSON.stringify(plan));
-let shopChecked={}, cookCurrent=null, chatHistory=[], pendingChat='', weight=72;
+let shopChecked={}, cookCurrent=null, weight=72;
 let log={}, pantry={};
 async function askClaude(messages, system, maxTokens){
   const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:messages,system:system,max_tokens:maxTokens||1500})});
@@ -293,14 +297,16 @@ function esc(s){return (''+s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':
 function euro(p){return typeof p==='number'?('~'+p.toFixed(2).replace('.',',')+' €'):'';}
 function renderPlan(){
   const b=DISHES[plan.breakfast], l=DISHES[plan.lunch];
-  const cards=DAYS.map(day=>{ const d=DISHES[plan.dinners[day]]; if(!d) return '';
+  const todayIdx=(new Date().getDay()+6)%7;
+  const cards=DAYS.slice(todayIdx).map(day=>{ const d=DISHES[plan.dinners[day]]; if(!d) return '';
     return '<div class="card"><div class="thumb">'+pic(d)+'</div><div class="body"><div class="daytag">'+day+'</div><div class="dish">'+esc(d.name)+'</div><div class="meta">'+(d.price!=null?euro(d.price)+' · ':'')+'~'+d.nutri.kcal+' kcal</div><div class="meallines">🌅 <b>Frühstück:</b> '+esc(b.name)+'<br>🥗 <b>Mittag:</b> '+esc(l.name)+'</div><button class="btn full" data-cook="'+plan.dinners[day]+'">Abendessen kochen</button></div></div>';
   }).join('');
-  app.innerHTML='<section class="view"><p class="eyebrow">Dein Tag, ganze Woche</p><h2 class="section">Wochenplan</h2><p class="lead">Frühstück und Mittag gelten für die ganze Woche, das Abendessen wechselt täglich – zusammen rund 2100 kcal am Tag. Unter „Plan bearbeiten" kannst du alles ändern.</p><div class="grid days">'+cards+'</div></section>';
+  app.innerHTML='<section class="view"><p class="eyebrow">Dein Tag, ganze Woche</p><h2 class="section">Wochenplan</h2><p class="lead">Frühstück und Mittag gelten für die ganze Woche, das Abendessen wechselt täglich – zusammen rund 2100 kcal am Tag. Vergangene Tage dieser Woche sind ausgeblendet. Unter „Plan bearbeiten" kannst du alles ändern.</p><div class="grid days">'+cards+'</div></section>';
   app.querySelectorAll('[data-cook]').forEach(x=>x.onclick=()=>{cookCurrent=x.dataset.cook; switchView('cook');});
 }
 function optCard(id, day){ const d=DISHES[id]; const sel=(day?draft.dinners[day]===id:(d.meal==='b'?draft.breakfast===id:draft.lunch===id));
-  return '<button class="opt" aria-pressed="'+sel+'" data-id="'+id+'" '+(day?'data-day="'+day+'"':'data-pick="'+d.meal+'"')+'><div class="ph">'+pic(d)+'<span class="check">✓</span></div><div class="oc"><div class="on">'+esc(d.name)+'</div><div class="od">'+esc(SUBS[id]||d.time)+' · '+d.nutri.kcal+' kcal'+(d.price!=null?' · '+euro(d.price):'')+'</div></div></button>';
+  const ings=(d.ing||[]).map(x=>esc(x[0])+(x[1]!=null?' – '+x[1]+(x[2]?' '+esc(x[2]):''):'')).join('<br>');
+  return '<div class="opt" role="button" tabindex="0" aria-pressed="'+sel+'" data-id="'+id+'" '+(day?'data-day="'+day+'"':'data-pick="'+d.meal+'"')+'><div class="ph">'+pic(d)+'<span class="check">✓</span></div><div class="oc"><div class="on">'+esc(d.name)+'</div><div class="od">'+esc(SUBS[id]||d.time)+' · '+d.nutri.kcal+' kcal'+(d.price!=null?' · '+euro(d.price):'')+'</div><div class="ingbtn" data-tgl>Zutaten ▾</div><div class="inglist" hidden>'+ings+'</div></div></div>';
 }
 function renderCreate(){
   const bf=BREAKFASTS.map(id=>optCard(id)).join('');
@@ -318,6 +324,8 @@ function renderCreate(){
     const el=app.querySelector('#draftnote'); if(el) el.textContent=n;
   }
   app.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{ const id=o.dataset.id; if(o.dataset.day) draft.dinners[o.dataset.day]=id; else if(o.dataset.pick==='b') draft.breakfast=id; else draft.lunch=id; paint(); });
+  app.querySelectorAll('[data-tgl]').forEach(b=>b.onclick=(ev)=>{ev.stopPropagation(); const l=b.nextElementSibling; l.hidden=!l.hidden; b.textContent=l.hidden?'Zutaten ▾':'Zutaten ▴';});
+  app.querySelectorAll('.opt').forEach(o=>o.onkeydown=(ev)=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault(); o.click();}});
   app.querySelector('#resetDraft').onclick=()=>{ draft={dinners:Object.assign({},DEFAULT_DINNERS),breakfast:'b-pancakes',lunch:'l-bowl'}; renderCreate(); };
   app.querySelector('#saveDraft').onclick=async()=>{
     const btn=app.querySelector('#saveDraft'); btn.disabled=true; btn.textContent='Speichere…';
@@ -353,7 +361,7 @@ function guessIllo(d){ const t=((d.name||'')+' '+((d.tags||[]).join(' '))).toLow
   if(/lachs|fisch|forelle/.test(t))return'fish'; if(/reis|risotto/.test(t))return'rice'; if(/omelet|shakshuka/.test(t))return'eggs'; if(/hack|frikad|bulet|klops|chili/.test(t))return'meat';
   if(/kartoffel/.test(t))return'potato'; if(/hähnch|huhn|ofen|braten/.test(t))return'sheetC'; if(/salat|bowl/.test(t))return'salad'; return'sheet'; }
 function renderCook(){
-  if(!cookCurrent||!DISHES[cookCurrent]) cookCurrent=plan.dinners[DAYS[0]];
+  if(!cookCurrent||!DISHES[cookCurrent]) cookCurrent=plan.dinners[dayName()];
   const dinnerNav=DAYS.map(day=>{const id=plan.dinners[day],d=DISHES[id]; return '<button data-id="'+id+'" aria-current="'+(cookCurrent===id)+'"><span class="mini">'+pic(d,'')+'</span><span><span style="display:block;font-size:11px;color:var(--muted)">'+day+'</span>'+esc(d.name.split(' (')[0])+'</span></button>';}).join('');
   const mealBtn=(id)=>{const d=DISHES[id]; return '<button data-id="'+id+'" aria-current="'+(cookCurrent===id)+'"><span class="mini">'+pic(d,'')+'</span><span>'+esc(d.name)+'</span></button>';};
   const d=DISHES[cookCurrent];
@@ -361,41 +369,50 @@ function renderCook(){
   const steps=(d.steps||[]).map(s=>'<li><span>'+esc(s)+'</span></li>').join('');
   const lo=d.leftoverOf&&DISHES[d.leftoverOf]?'<div class="tip"><i>♻️</i><div>Nutzt die Reste von <strong>'+esc(DISHES[d.leftoverOf].name.split(' (')[0])+'</strong>. Ist nichts mehr da, koch das Original frisch.</div></div>':'';
   const batch=d.batch?'<div class="tip"><i>🍲</i><div>'+esc(d.batch)+'</div></div>':'';
-  app.innerHTML='<section class="view"><p class="eyebrow">Koch-Modus</p><h2 class="section">Kochen</h2><p class="lead">Wähle ein Gericht – Zutaten und Schritte kannst du beim Kochen abhaken. Fragen dazu? Tippe oben auf „Fragen".</p><div class="cooklayout"><div class="cooknav"><div class="grouplbl">Abendessen (Woche)</div>'+dinnerNav+'<div class="grouplbl">Frühstück</div>'+mealBtn(plan.breakfast)+'<div class="grouplbl">Mittag</div>'+mealBtn(plan.lunch)+'</div><div class="recipe"><div class="rhead"><div class="ill">'+pic(d,'illsvg')+'</div><div><h3>'+esc(d.name)+'</h3><div class="rmeta">⏱ '+esc(d.time)+' · 1 Portion · ~'+d.nutri.kcal+' kcal'+(d.price!=null?' · '+euro(d.price)+' Zutaten':'')+'</div></div></div>'+lo+batch+'<div class="panel"><h4>Zutaten</h4><ul class="ing">'+ing+'</ul></div><div class="panel"><h4>Zubereitung</h4><ol class="steps">'+steps+'</ol></div></div></div></section>';
+  app.innerHTML='<section class="view"><p class="eyebrow">Koch-Modus</p><h2 class="section">Kochen</h2><p class="lead">Wähle ein Gericht – Zutaten und Schritte kannst du beim Kochen abhaken.</p><div class="cooklayout"><div class="cooknav"><div class="grouplbl">Abendessen (Woche)</div>'+dinnerNav+'<div class="grouplbl">Frühstück</div>'+mealBtn(plan.breakfast)+'<div class="grouplbl">Mittag</div>'+mealBtn(plan.lunch)+'</div><div class="recipe"><div class="rhead"><div class="ill">'+pic(d,'illsvg')+'</div><div><h3>'+esc(d.name)+'</h3><div class="rmeta">⏱ '+esc(d.time)+' · 1 Portion · ~'+d.nutri.kcal+' kcal'+(d.price!=null?' · '+euro(d.price)+' Zutaten':'')+'</div></div></div>'+lo+batch+'<div class="panel"><h4>Zutaten</h4><ul class="ing">'+ing+'</ul></div><div class="panel"><h4>Zubereitung</h4><ol class="steps">'+steps+'</ol></div></div></div></section>';
   app.querySelectorAll('.cooknav button').forEach(b=>b.onclick=()=>{cookCurrent=b.dataset.id; renderCook(); window.scrollTo({top:0,behavior:'smooth'});});
   app.querySelectorAll('ol.steps li span').forEach(s=>s.onclick=()=>s.parentElement.classList.toggle('done'));
 }
 function todayISO(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function dayName(){return DAYS[(new Date().getDay()+6)%7];}
+function dayNameOf(iso){const d=new Date(iso+'T12:00:00');return DAYS[(d.getDay()+6)%7];}
 function lastDays(n){const a=[];for(let i=0;i<n;i++){const d=new Date();d.setDate(d.getDate()-i);a.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));}return a;}
-function slotDishId(s){return s==='b'?plan.breakfast:(s==='l'?plan.lunch:plan.dinners[dayName()]);}
+function slotDishId(s,dn){return s==='b'?plan.breakfast:(s==='l'?plan.lunch:plan.dinners[dn||dayName()]);}
 function logFor(date){if(!log[date])log[date]=[];return log[date];}
-function isEaten(slot){return logFor(todayISO()).some(e=>e.slot===slot);}
+function isEaten(slot,date){return logFor(date).some(e=>e.slot===slot);}
 function pantryAdjust(ing,sign){(ing||[]).forEach(p=>{if(typeof p[1]!=='number'||p[3]==='staple')return;const key=p[0].toLowerCase()+'|'+(p[2]||'');if(pantry[key]){pantry[key].qty=Math.max(0,Math.round((pantry[key].qty+sign*p[1])*10)/10);}});}
-async function toggleEaten(slot){
-  const entries=logFor(todayISO()), i=entries.findIndex(e=>e.slot===slot);
+function usableStock(cat,key){const e=pantry[key]; if(!e||!e.qty) return 0;
+  if(cat==='vorrat'||cat==='tk') return e.qty;
+  const days=(Date.now()-(e.ts||0))/86400000;
+  if(cat==='kuehl') return days<=7?e.qty:0;
+  return days<=5?e.qty:0;}
+async function toggleEaten(slot,date){
+  const entries=logFor(date), i=entries.findIndex(e=>e.slot===slot);
   if(i>=0){const d=DISHES[entries[i].id]; entries.splice(i,1); if(d)pantryAdjust(d.ing,1);}
-  else{const id=slotDishId(slot), d=DISHES[id]; if(!d)return; entries.push({slot:slot,id:id,name:d.name,nutri:d.nutri}); pantryAdjust(d.ing,-1);}
+  else{const id=slotDishId(slot,dayNameOf(date)), d=DISHES[id]; if(!d)return; entries.push({slot:slot,id:id,name:d.name,nutri:d.nutri}); pantryAdjust(d.ing,-1);}
   await store('log_v1',log); await store('pantry_v1',pantry);
 }
 function numIn(id,label,w){return '<label style="font-size:12px;color:var(--muted)">'+label+'<br><input id="'+id+'" type="number" min="0" step="any" placeholder="0" style="width:'+(w||86)+'px;font-family:var(--body);font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></label>';}
+let todayViewDate=null;
 function renderToday(){
-  const t=todayISO();
+  const t=todayViewDate||todayISO(), dn=dayNameOf(t), isToday=t===todayISO();
   const slots=[['b','🌅 Frühstück'],['l','🥗 Mittag'],['d','🍽️ Abendessen']];
-  const rows=slots.map(s=>{const id=slotDishId(s[0]),d=DISHES[id]; if(!d)return''; const on=isEaten(s[0]);
+  const rows=slots.map(s=>{const id=slotDishId(s[0],dn),d=DISHES[id]; if(!d)return''; const on=isEaten(s[0],t);
     return '<li class="'+(on?'checked':'')+'"><input type="checkbox" data-slot="'+s[0]+'" id="sl'+s[0]+'" '+(on?'checked':'')+'><label for="sl'+s[0]+'">'+s[1]+': '+esc(d.name)+'</label><span class="amt">'+d.nutri.kcal+' kcal</span></li>';}).join('');
   const xs=logFor(t).filter(e=>e.slot==='x');
   const extras=xs.map((e,i)=>'<li><label>➕ '+esc(e.name)+'</label><span class="amt">'+Math.round(e.nutri.kcal||0)+' kcal</span><button class="btn" data-delx="'+i+'" style="padding:2px 10px;margin-left:8px">✕</button></li>').join('');
   const sum={kcal:0,protein:0}; logFor(t).forEach(e=>{sum.kcal+=e.nutri.kcal||0; sum.protein+=e.nutri.protein||0;});
-  app.innerHTML='<section class="view"><p class="eyebrow">'+dayName()+' · '+t+'</p><h2 class="section">Heute</h2><p class="lead">Hak ab, was du gegessen hast – das zieht die Zutaten automatisch von deinen Vorräten ab und zählt für die Nährstoff-Auswertung. Snacks oder Essen außer Haus trägst du unten ein.</p>'
-  +'<div class="shopgroup"><h4>Aus deinem Plan</h4><ul class="shop">'+rows+'</ul></div>'
+  app.innerHTML='<section class="view"><p class="eyebrow">'+dn+' · '+t+(isToday?'':' · nachträglich')+'</p><h2 class="section">'+(isToday?'Heute':dn+' nachtragen')+'</h2><p class="lead">Hak ab, was du gegessen hast – das zieht die Zutaten von deinen Vorräten ab und zählt für die Nährstoff-Auswertung. Über das Datum kannst du auch vergangene Tage nachtragen.</p>'
+  +'<div class="generate"><div class="gtxt"><h3>📅 Tag wählen</h3><p>Falls du das Abhaken mal vergessen hast.</p></div><input type="date" id="tDate" value="'+t+'" max="'+todayISO()+'" style="font-family:var(--body);font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></div>'
+  +'<div class="shopgroup"><h4>Aus deinem Plan ('+dn+')</h4><ul class="shop">'+rows+'</ul></div>'
   +'<div class="shopgroup"><h4>Außerhalb des Plans</h4><ul class="shop">'+(extras||'<li><label style="color:var(--muted)">Noch nichts eingetragen.</label></li>')+'</ul></div>'
   +'<div class="generate" style="align-items:flex-end;gap:12px;flex-wrap:wrap"><div class="gtxt" style="min-width:100%;flex-basis:100%"><h3>➕ Anderes Essen eintragen</h3><p>Nur Name und kcal sind Pflicht – der Rest macht die Auswertung genauer.</p></div>'
   +'<label style="font-size:12px;color:var(--muted)">Name<br><input id="xName" type="text" placeholder="z. B. Döner" style="width:170px;font-family:var(--body);font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></label>'
   +numIn('xKcal','kcal')+numIn('xP','Eiweiß (g)')+numIn('xFib','Ballastst. (g)')+numIn('xFe','Eisen (mg)')+numIn('xCa','Calcium (mg)')+numIn('xC','Vit. C (mg)')
   +'<button class="btn primary" id="xAdd">Eintragen</button></div>'
-  +'<div class="callout">Heute bisher: <strong>'+Math.round(sum.kcal)+' kcal</strong> · '+Math.round(sum.protein)+' g Eiweiß. Auswertung unter „Nährstoffe", Bestand unter „Vorräte".</div></section>';
-  app.querySelectorAll('input[data-slot]').forEach(cb=>cb.onchange=async()=>{await toggleEaten(cb.dataset.slot); renderToday();});
+  +'<div class="callout">'+(isToday?'Heute':dn)+' bisher: <strong>'+Math.round(sum.kcal)+' kcal</strong> · '+Math.round(sum.protein)+' g Eiweiß. Auswertung unter „Nährstoffe", Bestand unter „Vorräte".</div></section>';
+  app.querySelector('#tDate').onchange=(ev)=>{const v=ev.target.value; todayViewDate=(v&&v!==todayISO())?v:null; renderToday();};
+  app.querySelectorAll('input[data-slot]').forEach(cb=>cb.onchange=async()=>{await toggleEaten(cb.dataset.slot,t); renderToday();});
   app.querySelectorAll('[data-delx]').forEach(b=>b.onclick=async()=>{const i=+b.dataset.delx; const list=logFor(t); let n=-1;
     for(let j=0;j<list.length;j++){ if(list[j].slot==='x'){n++; if(n===i){list.splice(j,1); break;}} }
     await store('log_v1',log); renderToday();});
@@ -407,6 +424,7 @@ function renderToday(){
     await store('log_v1',log); toast('Eingetragen ✓'); renderToday();
   };
 }
+
 function renderPantry(){
   const keys=Object.keys(pantry).filter(k=>pantry[k]).sort((a,b)=>pantry[a].item.localeCompare(pantry[b].item));
   const lis=keys.map(k=>{const e=pantry[k];
@@ -418,13 +436,13 @@ function renderPantry(){
   +'<label style="font-size:12px;color:var(--muted)">Einheit<br><input id="pUnit" type="text" placeholder="g, ml, Dose …" style="width:110px;font-family:var(--body);font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></label>'
   +'<button class="btn primary" id="pAdd">Hinzufügen</button><button class="btn" id="pImport">Abgehakte Einkäufe übernehmen</button></div>'
   +'<div class="shopgroup"><h4>Aktueller Bestand</h4>'+(lis?'<ul class="shop">'+lis+'</ul>':'<div class="empty">🧺 Noch keine Vorräte eingetragen.</div>')+'</div>'
-  +'<div class="callout">Abgezogen wird, was in den Rezepten steht (gleiche Bezeichnung und Einheit). Basics wie Öl, Salz und Gewürze zählen nicht mit. Mengen kannst du hier jederzeit von Hand korrigieren.</div></section>';
+  +'<div class="callout">Abgezogen wird, was in den Rezepten steht (gleiche Bezeichnung und Einheit). Basics wie Öl, Salz und Gewürze zählen nicht mit. Für die Einkaufsliste gelten Vorräte als verfügbar: Trockenes/Dosen und TK immer, Kühlregal bis 7 Tage, Obst &amp; Gemüse bis 5 Tage nach dem Eintrag. Mengen kannst du jederzeit von Hand korrigieren.</div></section>';
   app.querySelector('#pAdd').onclick=async()=>{
     const name=app.querySelector('#pName').value.trim(), qty=parseFloat(app.querySelector('#pQty').value)||0, unit=app.querySelector('#pUnit').value.trim();
     if(!name||!qty){toast('Bitte Zutat und Menge angeben.'); return;}
     const key=name.toLowerCase()+'|'+unit;
     if(!pantry[key]) pantry[key]={item:name,unit:unit,qty:0};
-    pantry[key].qty=Math.round((pantry[key].qty+qty)*10)/10;
+    pantry[key].qty=Math.round((pantry[key].qty+qty)*10)/10; pantry[key].ts=Date.now();
     await store('pantry_v1',pantry); toast('Eingetragen ✓'); renderPantry();
   };
   app.querySelector('#pImport').onclick=async()=>{
@@ -433,7 +451,7 @@ function renderPantry(){
       const sk=cat+'|'+e.item; if(!shopChecked[sk]) return;
       const qty=e.hasNum?e.qty:e.count; const key=e.item.toLowerCase()+'|'+(e.unit||'');
       if(!pantry[key]) pantry[key]={item:e.item,unit:e.unit||'',qty:0};
-      pantry[key].qty=Math.round((pantry[key].qty+qty)*10)/10;
+      pantry[key].qty=Math.round((pantry[key].qty+qty)*10)/10; pantry[key].ts=Date.now();
       shopChecked[sk]=false; n++;
     }));
     if(!n){toast('Nichts abgehakt – setz erst Häkchen in der Einkaufsliste.'); return;}
@@ -442,7 +460,7 @@ function renderPantry(){
   };
   app.querySelectorAll('ul.shop li[data-k]').forEach(li=>{
     const k=li.dataset.k;
-    li.querySelector('input').onchange=async(ev)=>{pantry[k].qty=Math.max(0,parseFloat(ev.target.value)||0); await store('pantry_v1',pantry);};
+    li.querySelector('input').onchange=async(ev)=>{pantry[k].qty=Math.max(0,parseFloat(ev.target.value)||0); pantry[k].ts=Date.now(); await store('pantry_v1',pantry);};
     li.querySelector('[data-rm]').onclick=async()=>{delete pantry[k]; await store('pantry_v1',pantry); renderPantry();};
   });
 }
@@ -463,12 +481,16 @@ function renderShop(){
   let html='';
   Object.keys(labels).forEach(cat=>{ const items=Object.values(cats[cat]||{}); if(!items.length) return;
     const lis=items.sort((a,b)=>a.item.localeCompare(b.item)).map(e=>{ const key=cat+'|'+e.item;
-      const amt=e.hasNum?(Math.round(e.qty*10)/10+(e.unit?(' '+e.unit):'')):(e.count>1?'×'+e.count:'');
+      const avail=usableStock(cat,e.item.toLowerCase()+'|'+(e.unit||''));
+      let amt, covered=false;
+      if(e.hasNum){ const rem=Math.max(0,Math.round((e.qty-avail)*10)/10); covered=rem<=0;
+        amt=covered?'Vorrat reicht ✓':(rem+(e.unit?(' '+e.unit):'')+(avail>0?' (−'+(Math.round(Math.min(avail,e.qty)*10)/10)+' Vorrat)':'')); }
+      else amt=e.count>1?'×'+e.count:'';
       const ck=shopChecked[key]?'checked':'';
-      return '<li class="'+(ck?'checked':'')+'" data-k="'+esc(key)+'"><input type="checkbox" '+ck+'><label>'+esc(e.item)+'</label><span class="amt">'+esc(amt)+'</span></li>';}).join('');
+      return '<li class="'+((ck||covered)?'checked':'')+'" data-k="'+esc(key)+'"><input type="checkbox" '+ck+'><label>'+esc(e.item)+'</label><span class="amt">'+esc(amt)+'</span></li>';}).join('');
     html+='<div class="shopgroup"><h4>'+labels[cat]+'</h4><ul class="shop">'+lis+'</ul></div>'; });
   const stap=staples.length?'<div class="callout"><strong>Vorrat checken</strong> – meist im Haus: '+staples.map(esc).join(', ')+'.</div>':'';
-  app.innerHTML='<section class="view"><p class="eyebrow">Für die Woche</p><h2 class="section">Einkaufsliste</h2><p class="lead">Aus dem ganzen Tagesplan – Frühstück und Mittag je 7×, plus die Abendessen. Häkchen bleiben gespeichert.</p>'+(html||'<div class="empty">🛒 Noch nichts geplant.</div>')+stap+'</section>';
+  app.innerHTML='<section class="view"><p class="eyebrow">Für die Woche</p><h2 class="section">Einkaufsliste</h2><p class="lead">Aus dem ganzen Tagesplan – Frühstück und Mittag je 7×, plus die Abendessen. Deine Vorräte werden automatisch abgezogen (Frisches nur, solange es haltbar ist). Häkchen bleiben gespeichert.</p>'+(html||'<div class="empty">🛒 Noch nichts geplant.</div>')+stap+'</section>';
   app.querySelectorAll('ul.shop li').forEach(li=>{const cb=li.querySelector('input'); cb.onchange=async()=>{li.classList.toggle('checked',cb.checked); shopChecked[li.dataset.k]=cb.checked; await store('shop_v4',shopChecked);};});
 }
 function targetFor(k){ if(k==='kcal') return 2100; if(k==='protein') return Math.round(weight*1.5); return RI[k][1]; }
@@ -503,30 +525,7 @@ function renderNutri(){
   const wi=app.querySelector('#wIn'); if(wi) wi.onchange=async()=>{ let v=parseInt(wi.value,10); if(!v||v<40)v=40; if(v>160)v=160; weight=v; await store('weight_v4',weight); renderNutri(); };
 }
 
-function planSummary(){ return 'Frühstück: '+DISHES[plan.breakfast].name+'; Mittag: '+DISHES[plan.lunch].name+'; Abendessen – '+DAYS.map(d=>d+': '+DISHES[plan.dinners[d]].name).join(', '); }
-function renderChat(){
-  const chips=['Wie peppe ich mein Abendessen auf?','Ersatz für Feta?','Mach Mittwoch vegetarisch','Wie friere ich Reste ein?'];
-  const log=chatHistory.map(m=>'<div class="msg '+(m.role==='user'?'user':'bot')+'">'+esc(m.content)+'</div>').join('');
-  app.innerHTML='<section class="view"><p class="eyebrow">Sprich mit mir</p><h2 class="section">Fragen &amp; Rückfragen</h2><p class="lead">Frag Claude alles zu deinem Plan, zu Rezepten, Ersatzzutaten oder Resten – er kennt deinen aktuellen Tagesplan.</p><div class="chips">'+chips.map(c=>'<button class="chip">'+esc(c)+'</button>').join('')+'</div><div class="chatwrap"><div class="chatlog" id="chatlog">'+(log||'<div class="msg bot">Hi! Was möchtest du zu deiner Woche wissen?</div>')+'</div><div class="chatin"><input id="chatInput" placeholder="Frage eingeben…" autocomplete="off"><button class="btn primary" id="chatSend">Senden</button></div></div></section>';
-  const input=app.querySelector('#chatInput'), logEl=app.querySelector('#chatlog');
-  if(pendingChat){ input.value=pendingChat; pendingChat=''; input.focus(); }
-  logEl.scrollTop=logEl.scrollHeight;
-  app.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{input.value=c.textContent; input.focus();});
-  async function send(){ const q=input.value.trim(); if(!q)return; input.value='';
-    chatHistory.push({role:'user',content:q});
-    logEl.insertAdjacentHTML('beforeend','<div class="msg user">'+esc(q)+'</div><div class="msg bot think" id="th"><span class="dots"><span></span><span></span><span></span></span></div>');
-    logEl.scrollTop=logEl.scrollHeight;
-    try{ const sys='Du bist der freundliche Koch-Assistent der App „Wochenküche" für EINE Person, die gesund, günstig und einfach kocht und alles isst (Ziel ~2100 kcal/Tag). Antworte knapp, praktisch, auf Deutsch. Aktueller Plan: '+planSummary()+'.';
-      const ans=await askClaude(chatHistory.slice(-12).map(m=>({role:m.role,content:m.content})), sys);
-      chatHistory.push({role:'assistant',content:ans}); await store('chat_v4',chatHistory.slice(-30));
-      const t=document.getElementById('th'); if(t){t.classList.remove('think'); t.textContent=ans; t.id='';}
-    }catch(e){ const t=document.getElementById('th'); if(t){t.classList.remove('think'); t.textContent='Da ging etwas schief – bitte nochmal versuchen.'; t.id='';} }
-    logEl.scrollTop=logEl.scrollHeight;
-  }
-  app.querySelector('#chatSend').onclick=send;
-  input.addEventListener('keydown',e=>{if(e.key==='Enter')send();});
-}
-const VIEWS={plan:renderPlan,today:renderToday,cook:renderCook,create:renderCreate,shop:renderShop,pantry:renderPantry,nutri:renderNutri,chat:renderChat};
+const VIEWS={plan:renderPlan,today:renderToday,cook:renderCook,create:renderCreate,shop:renderShop,pantry:renderPantry,nutri:renderNutri};
 function switchView(v){ document.querySelectorAll('#nav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.view===v)); if(v==='create') draft=JSON.parse(JSON.stringify(plan)); VIEWS[v](); window.scrollTo({top:0,behavior:'smooth'}); }
 document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
 let toastT; function toast(m){const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600);}
@@ -539,7 +538,6 @@ let toastT; function toast(m){const t=document.getElementById('toast'); t.textCo
   if(!DISHES[plan.lunch]) plan.lunch='l-bowl';
   shopChecked=await load('shop_v4',{});
   weight=await load('weight_v4',72);
-  chatHistory=await load('chat_v4',[]);
   log=await load('log_v1',{});
   pantry=await load('pantry_v1',{});
   draft=JSON.parse(JSON.stringify(plan));
