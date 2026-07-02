@@ -19,7 +19,7 @@
 - Beispiel-Feedback: Hähnchenschenkel wirkte zu teuer → ersetzt.
 
 ## Geschmack / konkrete Vorlieben
-- Isst alles (keine Unverträglichkeiten bekannt).
+- Isst alles (keine Unverträglichkeiten bekannt), **außer Brokkoli – mag er nicht**. In Gerichten durch Blumenkohl, Paprika, grüne Bohnen o. ä. ersetzen (auf ähnliche Nährwerte, v. a. Vitamin C und Ballaststoffe, achten).
 - Deutsche Alltagsküche + gängige internationale Gerichte funktionieren gut (Dal, Curry, Tortilla, Enchiladas, Käsespätzle, Erbseneintopf …).
 
 ## Einkaufsliste
@@ -48,6 +48,7 @@
 ## App-Konventionen (Wochenplan, Netlify)
 - App heißt **„Wochenplan"** (früher „Wochenküche").
 - Tabs: Plan · Heute · Kochen · Plan bearbeiten · Einkaufsliste · Vorräte · Nährstoffe (kein „Fragen"-Chat-Tab).
+- **Einkaufsliste „Ab heute" und Meal-Prep:** Ist das heutige Abendessen unter „Heute" als gegessen abgehakt UND es existiert dafür eine spätere Meal-Prep-Option im Plan, zählt die „Ab heute"-Einkaufsliste weder das heutige Gericht noch die spätere Meal-Prep-Portion erneut mit (schon eingekauft/gekocht). Ohne das Abhaken kann die App das nicht wissen – Maik daran erinnern, frisch gekochte Meal-Prep-Gerichte zeitnah unter „Heute" abzuhaken.
 - „Plan speichern" in „Plan bearbeiten" **setzt alle Abendessen-Verschiebungen zurück** (overrides_v1 wird geleert) – der neu gespeicherte Plan gilt, sonst würden alte Verschiebungen ihn auf der Plan-Seite überdecken. Abendessen-Tausch (⇄) läuft komplett über „Plan bearbeiten" und wird dauerhaft in plan_v4 gespeichert.
 - Plan: vergangene Wochentage ausblenden; datumsbasiert mit „↷ Verschieben" **pro Mahlzeit getrennt**: Abendessen kaskadiert einen Tag nach hinten (ggf. in die nächste Woche), Frühstück/Mittag werden für den Tag ausgesetzt (slotskips_v1). Kochen: Gericht des aktuellen Tages vorauswählen.
 - **Nicht verschoben = gegessen:** Ab dem Folgetag werden nicht verschobene Mahlzeiten automatisch als gegessen verbucht (Nährstoffe + Vorrats-Abzug, `finalized_v1` merkt den Stand). „Heute": manuelles Abhaken/Korrigieren, auch für vergangene Tage, + freies Essen mit Nährwerten eintragen.
