@@ -28,6 +28,15 @@
 - **Zwiebeln und Knoblauch nie auf die Einkaufsliste** – die sind immer im Haus.
 - Vorräte automatisch abziehen; Frisches nur solange haltbar (Kühlregal ≤7 Tage, Obst/Gemüse ≤5 Tage, Trockenes/TK immer).
 
+## Kochen
+- Maik ist **Koch-Anfänger**: Zubereitungsschritte detailliert schreiben – konkrete Würzmengen (z. B. „½ TL Salz, 1 TL Paprikapulver"), Hitzestufen, Garzeiten und Woran-erkenne-ich-dass-es-fertig-ist-Hinweise.
+
+## Wöchentliche Routine (samstags morgens)
+- Jeden **Samstagmorgen** wird der Plan für die **kommende Woche (bis Sonntag)** erstellt.
+- Dabei **Vorräte/Reste möglichst aufbrauchen** (Bestand liegt unter `/api/store?key=pantry_v1`, abzüglich dessen, was der neue Plan ohnehin braucht).
+- **Verschobene Gerichte beachten:** Die App hat eine „↷ Verschieben"-Funktion (overrides unter `/api/store?key=overrides_v1`, Datum→Gericht-ID bzw. `skip`). Ragt ein verschobenes Gericht in die neue Woche (z. B. Sonntag→Montag), beginnt der neue Plan erst am Tag danach (z. B. Dienstag) – geplant wird trotzdem immer nur bis Sonntag.
+- Neuen Plan per `PUT /api/store?key=plan_v4` speichern (Format: `{dinners:{Montag:'id',…},breakfast:'id',lunch:'id'}`), neue Gerichte zusätzlich nach `custom_v4` (id→Gericht-Objekt, ids mit `gen-` Präfix).
+
 ## Bei jedem neuen Plan
 - **Möglichst komplett neue Gerichte ausdenken**, bisherige nicht wiederholen (auch der „Neue Woche generieren"-Button übergibt die Liste bisheriger Gerichte zum Ausschließen).
 - **Fotos müssen zum Gericht passen und erreichbar sein**: nur verifizierte URLs (TheMealDB `themealdb.com/images/media/meals/…` oder direkte `upload.wikimedia.org`-Thumbnails, KEINE `Special:FilePath`-Redirects – die werden bei vielen Bildern gedrosselt und laden dann nicht).
@@ -35,7 +44,7 @@
 ## App-Konventionen (Wochenplan, Netlify)
 - App heißt **„Wochenplan"** (früher „Wochenküche").
 - Tabs: Plan · Heute · Kochen · Plan bearbeiten · Einkaufsliste · Vorräte · Nährstoffe (kein „Fragen"-Chat-Tab).
-- Plan: vergangene Wochentage ausblenden; Kochen: Gericht des aktuellen Tages vorauswählen.
+- Plan: vergangene Wochentage ausblenden; datumsbasiert mit „↷ Verschieben" (Gericht + alle folgenden rutschen einen Tag nach hinten, ggf. in die nächste Woche); Kochen: Gericht des aktuellen Tages vorauswählen.
 - „Heute": Mahlzeiten abhaken (auch vergangene Tage nachtragbar) + freies Essen mit Nährwerten eintragen.
 - „Vorräte": Einkäufe erfassen; beim Abhaken werden Rezept-Zutaten abgezogen.
 - Nährstoffe: umschaltbar Plan-Soll / Heute / Ø 7 Tage / Ø 30 Tage. Getrackt werden kcal, Eiweiß, Ballaststoffe, Eisen, Calcium, Vitamin C.
