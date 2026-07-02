@@ -31,7 +31,7 @@
 
 ## Kochen
 - Maik ist **Koch-Anfänger**: Zubereitungsschritte detailliert schreiben – konkrete Würzmengen (z. B. „½ TL Salz, 1 TL Paprikapulver"), Hitzestufen, Garzeiten und Woran-erkenne-ich-dass-es-fertig-ist-Hinweise.
-- **Meal-Prep = doppelte Portion:** Ist ein Gericht an einem späteren Tag als „(Meal-Prep)" eingeplant, muss beim Kochen des Originals die doppelte Menge gekocht werden. Der Koch-Modus zeigt dafür automatisch einen „Doppelte Portion kochen!"-Hinweis auf dem Basisgericht (die Einkaufsliste rechnet die doppelten Zutaten bereits ein). Bei neuen Gerichten/Plänen immer daran denken.
+- **Meal-Prep = doppelte Portion, automatisch gerechnet:** Ist ein Gericht an einem späteren Tag als „(Meal-Prep)" eingeplant, zeigt der Koch-Modus beim Basisgericht alle Zutatenmengen bereits **×2** an (Kopf: „2 Portionen (inkl. Meal-Prep)", kleine Notiz „×2 – Meal-Prep einberechnet" bei den Zutaten) plus Hinweis-Box; die Einkaufsliste rechnet die doppelten Zutaten ebenfalls ein. Bei neuen Gerichten/Plänen immer daran denken.
 - **Keine vagen Angaben** wie „Salat mit Öl-Dressing dazu": immer ausschreiben, welcher Salat (z. B. „2 Handvoll Blattsalat") und welches Dressing mit Mengen (z. B. „1 EL Öl, 1 TL Essig, 1 Prise Salz und Zucker"). Gilt für alle Beilagen, Dips und Dressings.
 
 ## Wöchentliche Routine (samstags morgens)
