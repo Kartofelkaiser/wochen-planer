@@ -9,9 +9,9 @@
 - Der Plan soll gesund und abwechslungsreich sein.
 
 ## Plan-Struktur (immer so)
-- **4 Auswahlmöglichkeiten Frühstück**, **4 Mittagessen** (gelten jeweils für die ganze Woche).
-- **3+ Auswahlmöglichkeiten Abendessen pro Wochentag** (individuell pro Tag).
-- Meal-Prep-Paare sind erwünscht (z. B. Montag doppelt kochen → Mittwoch Reste), spart Geld und Zeit.
+- **5 Auswahlmöglichkeiten Frühstück**, **5 Mittagessen** (gelten jeweils für die ganze Woche).
+- **4 verschiedene echte Hauptgerichte pro Wochentag** (keine Reste-Einträge als feste Optionen).
+- **Meal-Prep dynamisch:** Wählt Maik in „Plan bearbeiten" ein Meal-Prep-taugliches Gericht (`prep:true` oder `batch`), erscheint an den 2 Folgetagen sofort (vor dem Speichern) automatisch eine „(Meal-Prep)"-Option zum Aufwärmen – zieht sich durch alle Tage. Diese Optionen erscheinen erst NACH Auswahl des Basisgerichts, nie vorher.
 
 ## Budget
 - Essen soll sich **hauptsächlich billig orientieren** – keine harte Grenze, ~3 €/Portion ist ein grober Richtwert, teurere Ausnahmen (z. B. Lachs ~4,50 €) sind okay, wenn der Rest günstig bleibt.
@@ -44,8 +44,8 @@
 ## App-Konventionen (Wochenplan, Netlify)
 - App heißt **„Wochenplan"** (früher „Wochenküche").
 - Tabs: Plan · Heute · Kochen · Plan bearbeiten · Einkaufsliste · Vorräte · Nährstoffe (kein „Fragen"-Chat-Tab).
-- Plan: vergangene Wochentage ausblenden; datumsbasiert mit „↷ Verschieben" (Gericht + alle folgenden rutschen einen Tag nach hinten, ggf. in die nächste Woche); Kochen: Gericht des aktuellen Tages vorauswählen.
-- „Heute": Mahlzeiten abhaken (auch vergangene Tage nachtragbar) + freies Essen mit Nährwerten eintragen.
+- Plan: vergangene Wochentage ausblenden; datumsbasiert mit „↷ Verschieben" **pro Mahlzeit getrennt**: Abendessen kaskadiert einen Tag nach hinten (ggf. in die nächste Woche), Frühstück/Mittag werden für den Tag ausgesetzt (slotskips_v1). Kochen: Gericht des aktuellen Tages vorauswählen.
+- **Nicht verschoben = gegessen:** Ab dem Folgetag werden nicht verschobene Mahlzeiten automatisch als gegessen verbucht (Nährstoffe + Vorrats-Abzug, `finalized_v1` merkt den Stand). „Heute": manuelles Abhaken/Korrigieren, auch für vergangene Tage, + freies Essen mit Nährwerten eintragen.
 - „Vorräte": Einkäufe erfassen; beim Abhaken werden Rezept-Zutaten abgezogen.
 - Nährstoffe: umschaltbar Plan-Soll / Heute / Ø 7 Tage / Ø 30 Tage. Getrackt werden kcal, Eiweiß, Ballaststoffe, Eisen, Calcium, Vitamin C.
 - Plan-Speicherung serverseitig über Netlify Function + Blobs (`/api/store`), Claude-Anbindung über `/api/claude` (braucht ANTHROPIC_API_KEY in Netlify; Claude.ai-Abo-Kontingent geht dafür nicht).
