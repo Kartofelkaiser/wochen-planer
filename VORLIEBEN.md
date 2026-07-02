@@ -51,4 +51,22 @@
 - Plan-Speicherung serverseitig über Netlify Function + Blobs (`/api/store`), Claude-Anbindung über `/api/claude` (braucht ANTHROPIC_API_KEY in Netlify; Claude.ai-Abo-Kontingent geht dafür nicht).
 - In „Plan bearbeiten" hat jede Gerichte-Karte ein aufklappbares „Zutaten"-Dropdown.
 
+## Technik-Spickzettel (für neue Chats & die Routine)
+- **Live-Site:** https://wochen-planer.netlify.app (Netlify, deployt automatisch bei Push auf `main`)
+- **Repo:** https://github.com/Kartofelkaiser/wochen-planer · lokaler Klon: `~/Desktop/Claude/wochen-planer` (Push-Token ist dort in der Git-Remote-URL konfiguriert – Token niemals in Dateien/Chats schreiben!)
+- **Alles ist eine Datei:** `index.html` (Gerichte im `DISHES`-Objekt, UI, Logik). Dazu `netlify/functions/store.mjs` (Speicher) und `claude.mjs` (Claude-Proxy).
+- **Speicher-API** (offen, kein Token): `GET/PUT https://wochen-planer.netlify.app/api/store?key=<key>` mit JSON-Body. Schlüssel:
+  - `plan_v4` – aktueller Plan `{dinners:{Montag:'id',…,Sonntag:'id'},breakfast:'id',lunch:'id'}`
+  - `custom_v4` – dynamische Gerichte (id→Objekt, Präfixe `gen-`/`prep-`)
+  - `pantry_v1` – Vorräte `{ "item|einheit": {item,unit,qty,ts} }`
+  - `overrides_v1` – verschobene Abendessen (Datum→Gericht-ID bzw. `'skip'`)
+  - `slotskips_v1` – ausgesetzte Frühstücke/Mittage `{ "YYYY-MM-DD": {b:true,l:true} }`
+  - `log_v1` – Ess-Protokoll (Datum→Einträge), `shop_v4` – Einkaufslisten-Häkchen, `weight_v4` – Gewicht, `finalized_v1` – letzter automatisch verbuchter Tag
+- **Gericht-Format** (in `DISHES` bzw. `custom_v4`): `{meal:'b'|'l'|'d', name, illo, photo, time, price, prep:true?, batch:'Hinweis'?, tags:[], nutri:{kcal,protein,fiber,iron,calcium,vitc}, ing:[[Name,Menge|null,Einheit,'gemuese|kuehl|vorrat|tk|staple']], steps:[…]}`
+- **Fotos vor Einbau prüfen:** `curl -s -o /dev/null -w "%{http_code}" <url>` muss 200 liefern; Motiv muss zum Gericht passen.
+- Lokal gibt es kein Node; JS-Syntax-Check auf dem Mac per `osascript -l JavaScript` und `new Function(code)`.
+
+## Fertiger Routine-Text (zum Kopieren)
+> Erstelle den Essensplan für die kommende Woche (Montag bis Sonntag) für die App „Wochenplan" (https://wochen-planer.netlify.app). Halte dich exakt an das angehängte Dokument VORLIEBEN.md: ~2100 kcal/Tag, 5 Frühstücke, 5 Mittagessen, 4 echte Abendessen pro Tag, günstig, Preise, neue Gerichte, detaillierte Anfänger-Kochschritte, verifizierte Fotos. Lies vorher per GET auf die Speicher-API: `pantry_v1` (Vorräte möglichst aufbrauchen), `overrides_v1` und `slotskips_v1` (ragt ein verschobenes Gericht in die neue Woche, beginnt der neue Plan erst am Tag danach). Speichere den fertigen Plan per PUT auf `plan_v4`, neue Gerichte nach `custom_v4`. Fasse am Ende kurz zusammen, was es diese Woche gibt und was es ungefähr kostet.
+
 *Stand: 2026-07-02*
