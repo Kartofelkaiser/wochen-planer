@@ -1,7 +1,7 @@
 # Maiks Essensplan-Vorlieben (für Claude)
 
 > Dieses Dokument in einen neuen Chat einfügen, damit Claude sofort alle Vorgaben kennt.
-> Claude: Halte dieses Dokument bei jeder neuen geäußerten Vorliebe aktuell (Repo: Kartofelkaiser/wochen-planer, Datei VORLIEBEN.md).
+> Claude: Halte dieses Dokument bei jeder neuen geäußerten Vorliebe **und jeder grundlegenden neuen Arbeitsanweisung** sofort aktuell (Repo: Kartofelkaiser/wochen-planer, Datei VORLIEBEN.md), damit alles beim Erstellen des nächsten Plans automatisch einfließt.
 
 ## Ernährungsziele
 - **~2100 kcal pro Tag**, alle Nährstoffe decken: Eiweiß ~1,5 g/kg Körpergewicht (Gewicht einstellbar, Standard 72 kg), Ballaststoffe ≥30 g, Eisen ≥14 mg, Calcium ≥1000 mg, Vitamin C ≥90 mg.
@@ -24,11 +24,14 @@
 
 ## Einkaufsliste
 - **Mengen in üblich verkauften Packungsgrößen angeben** (z. B. 500-g-Packung Hack, 10er-Karton Eier, 1-L-Milch), nicht in Gramm-Bedarf allein.
+- **Packungsgrößen müssen real bei Rewe/Netto existieren** – vor dem Eintragen prüfen, ob es die Größe dort wirklich gibt (Beispiel-Feedback: 360-g-Glas Apfelmus gab es bei Netto nicht → übliches 710-g-Glas). Die PACKS-Tabelle in index.html entsprechend pflegen.
+- **Keine Duplikate durch Schreibvarianten:** Zutaten in neuen Gerichten exakt so schreiben wie in bestehenden (z. B. immer „Möhren", nie mal „Möhre"; „Eier" statt „Ei"; „Käse (gerieben)"). Die App normalisiert bekannte Varianten zusätzlich über ITEM_ALIASES in index.html – neue Varianten dort ergänzen.
 - **Zwiebeln und Knoblauch nie auf die Einkaufsliste** – die sind immer im Haus.
 - Vorräte automatisch abziehen; Frisches nur solange haltbar (Kühlregal ≤7 Tage, Obst/Gemüse ≤5 Tage, Trockenes/TK immer).
 
 ## Kochen
 - Maik ist **Koch-Anfänger**: Zubereitungsschritte detailliert schreiben – konkrete Würzmengen (z. B. „½ TL Salz, 1 TL Paprikapulver"), Hitzestufen, Garzeiten und Woran-erkenne-ich-dass-es-fertig-ist-Hinweise.
+- **Keine vagen Angaben** wie „Salat mit Öl-Dressing dazu": immer ausschreiben, welcher Salat (z. B. „2 Handvoll Blattsalat") und welches Dressing mit Mengen (z. B. „1 EL Öl, 1 TL Essig, 1 Prise Salz und Zucker"). Gilt für alle Beilagen, Dips und Dressings.
 
 ## Wöchentliche Routine (samstags morgens)
 - Jeden **Samstagmorgen** wird der Plan für die **kommende Woche (bis Sonntag)** erstellt.
@@ -38,6 +41,7 @@
 
 ## Bei jedem neuen Plan
 - **Möglichst komplett neue Gerichte ausdenken**, bisherige nicht wiederholen (auch der „Neue Woche generieren"-Button übergibt die Liste bisheriger Gerichte zum Ausschließen).
+- **Nach jeder Plan-Änderung immer prüfen:** (1) die Einkaufsliste – keine Duplikate durch Schreibvarianten, alle Mengen in real existierenden Rewe/Netto-Packungsgrößen; (2) die Kochschritte – detailliert und ohne vage Angaben (siehe „Kochen"). Beides gehört fest zur Abnahme, bevor der Plan als fertig gilt.
 - **Fotos müssen zum Gericht passen und erreichbar sein**: nur verifizierte URLs (TheMealDB `themealdb.com/images/media/meals/…` oder direkte `upload.wikimedia.org`-Thumbnails, KEINE `Special:FilePath`-Redirects – die werden bei vielen Bildern gedrosselt und laden dann nicht).
 
 ## App-Konventionen (Wochenplan, Netlify)
