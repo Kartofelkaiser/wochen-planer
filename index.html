@@ -385,6 +385,7 @@ function renderCreate(){
     plan=JSON.parse(JSON.stringify(draft));
     const where=await store('plan_v4',plan);
     await store('custom_v4',Object.fromEntries(Object.entries(DISHES).filter(([k])=>k.indexOf('gen-')===0||k.indexOf('prep-')===0)));
+    if(Object.keys(overrides).length){ overrides={}; await store('overrides_v1',overrides); }
     shopChecked={}; await store('shop_v4',shopChecked);
     toast(where==='remote'?'Plan dauerhaft gespeichert ✓':'Plan lokal gespeichert (Server nicht erreichbar)');
     switchView('plan');
@@ -406,6 +407,7 @@ async function generateWeek(){
     plan.dinners=nd; draft=JSON.parse(JSON.stringify(plan));
     await store('custom_v4',Object.fromEntries(Object.entries(DISHES).filter(([k])=>k.indexOf('gen-')===0)));
     await store('plan_v4',plan);
+    if(Object.keys(overrides).length){ overrides={}; await store('overrides_v1',overrides); }
     shopChecked={}; await store('shop_v4',shopChecked);
     toast('Neue Woche ist da ✨'); switchView('plan');
   }catch(e){ btn.disabled=false; btn.textContent='Neue Woche generieren'; toast('Hat nicht geklappt: '+(e.message||'bitte nochmal versuchen.')); }
@@ -423,7 +425,10 @@ function renderCook(){
   const steps=(d.steps||[]).map(s=>'<li><span>'+esc(s)+'</span></li>').join('');
   const lo=d.leftoverOf&&DISHES[d.leftoverOf]?'<div class="tip"><i>♻️</i><div>Nutzt die Reste von <strong>'+esc(DISHES[d.leftoverOf].name.split(' (')[0])+'</strong>. Ist nichts mehr da, koch das Original frisch.</div></div>':'';
   const batch=d.batch?'<div class="tip"><i>🍲</i><div>'+esc(d.batch)+'</div></div>':'';
-  app.innerHTML='<section class="view"><p class="eyebrow">Koch-Modus</p><h2 class="section">Kochen</h2><p class="lead">Wähle ein Gericht – Zutaten und Schritte kannst du beim Kochen abhaken.</p><div class="cooklayout"><div class="cooknav"><div class="grouplbl">Abendessen (Woche)</div>'+dinnerNav+'<div class="grouplbl">Frühstück</div>'+mealBtn(plan.breakfast)+'<div class="grouplbl">Mittag</div>'+mealBtn(plan.lunch)+'</div><div class="recipe"><div class="rhead"><div class="ill">'+pic(d,'illsvg')+'</div><div><h3>'+esc(d.name)+'</h3><div class="rmeta">⏱ '+esc(d.time)+' · 1 Portion · ~'+d.nutri.kcal+' kcal'+(d.price!=null?' · '+euro(d.price)+' Zutaten':'')+'</div></div></div>'+lo+batch+'<div class="panel"><h4>Zutaten</h4><ul class="ing">'+ing+'</ul></div><div class="panel"><h4>Zubereitung</h4><ol class="steps">'+steps+'</ol></div></div></div></section>';
+  const prepId='prep-'+cookCurrent;
+  const prepDays=[...new Set(DAYS.filter(day=>plan.dinners[day]===prepId).concat(Object.keys(overrides).filter(k=>overrides[k]===prepId).map(dayNameOf)))];
+  const dbl=prepDays.length?'<div class="tip"><i>✌️</i><div><strong>Doppelte Portion kochen!</strong> Dieses Gericht ist am '+prepDays.map(esc).join(' und ')+' nochmal als Meal-Prep eingeplant: alle Zutatenmengen ×2 nehmen (die Einkaufsliste rechnet das bereits mit ein). Die zweite Portion abkühlen lassen und abgedeckt in den Kühlschrank stellen.</div></div>':'';
+  app.innerHTML='<section class="view"><p class="eyebrow">Koch-Modus</p><h2 class="section">Kochen</h2><p class="lead">Wähle ein Gericht – Zutaten und Schritte kannst du beim Kochen abhaken.</p><div class="cooklayout"><div class="cooknav"><div class="grouplbl">Abendessen (Woche)</div>'+dinnerNav+'<div class="grouplbl">Frühstück</div>'+mealBtn(plan.breakfast)+'<div class="grouplbl">Mittag</div>'+mealBtn(plan.lunch)+'</div><div class="recipe"><div class="rhead"><div class="ill">'+pic(d,'illsvg')+'</div><div><h3>'+esc(d.name)+'</h3><div class="rmeta">⏱ '+esc(d.time)+' · 1 Portion · ~'+d.nutri.kcal+' kcal'+(d.price!=null?' · '+euro(d.price)+' Zutaten':'')+'</div></div></div>'+dbl+lo+batch+'<div class="panel"><h4>Zutaten</h4><ul class="ing">'+ing+'</ul></div><div class="panel"><h4>Zubereitung</h4><ol class="steps">'+steps+'</ol></div></div></div></section>';
   app.querySelectorAll('.cooknav button').forEach(b=>b.onclick=()=>{cookCurrent=b.dataset.id; renderCook(); window.scrollTo({top:0,behavior:'smooth'});});
   app.querySelectorAll('ol.steps li span').forEach(s=>s.onclick=()=>s.parentElement.classList.toggle('done'));
 }
