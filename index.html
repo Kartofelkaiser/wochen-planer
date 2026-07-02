@@ -312,20 +312,23 @@ function renderPlan(){
   const fmt=(dt)=>dt.slice(8,10)+'.'+dt.slice(5,7)+'.';
   const slotBtn=(dt,s,icon,label)=>{const on=slotskips[dt]&&slotskips[dt][s];
     return '<button class="btn" data-skipslot="'+dt+'|'+s+'" style="flex:1;'+(on?'background:var(--amber-soft);border-color:var(--amber);color:#7a4d10':'')+'" title="'+(on?label+' wieder einplanen':label+' an diesem Tag verschieben (zählt dann nicht als gegessen)')+'">'+(on?'↩':'↷')+' '+icon+'</button>';};
+  const swapSel=(dt)=>{const opts=dates.filter(x=>x!==dt).map(x=>'<option value="'+x+'">'+dayNameOf(x)+' '+fmt(x)+'</option>').join('');
+    return '<select data-swap="'+dt+'" title="Abendessen mit einem anderen Tag tauschen" style="width:100%;margin-top:6px;font-family:var(--body);font-size:13px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--muted)"><option value="">⇄ Abendessen tauschen mit …</option>'+opts+'</select>';};
   const cards=dates.map(dt=>{
     const dn=dayNameOf(dt), o=overrides[dt], nextWeek=dt>wkSun?' (nächste Woche)':'';
     const sk=slotskips[dt]||{};
     const bl='🌅 <b>Frühstück:</b> '+esc(b.name)+(sk.b?' <span class="pill amber">↷ verschoben</span>':'')+'<br>🥗 <b>Mittag:</b> '+esc(l.name)+(sk.l?' <span class="pill amber">↷ verschoben</span>':'');
-    if(o==='skip') return '<div class="card"><div class="body"><div class="daytag">'+dn+' · '+fmt(dt)+nextWeek+'</div><div class="dish">🚫 Abend kochfrei</div><div class="meallines">Das Abendessen wurde verschoben.<br>'+bl+'</div><button class="btn full" data-unshift="'+dt+'">Verschiebung aufheben</button><div style="display:flex;gap:6px;margin-top:8px">'+slotBtn(dt,'b','🌅','Frühstück')+slotBtn(dt,'l','🥗','Mittag')+'</div></div></div>';
+    if(o==='skip') return '<div class="card"><div class="body"><div class="daytag">'+dn+' · '+fmt(dt)+nextWeek+'</div><div class="dish">🚫 Abend kochfrei</div><div class="meallines">Das Abendessen wurde verschoben.<br>'+bl+'</div><button class="btn full" data-unshift="'+dt+'">Verschiebung aufheben</button><div style="display:flex;gap:6px;margin-top:8px">'+slotBtn(dt,'b','🌅','Frühstück')+slotBtn(dt,'l','🥗','Mittag')+'</div>'+swapSel(dt)+'</div></div>';
     const id=dinnerIdFor(dt), d=DISHES[id]; if(!d) return '';
     const moved=(o&&DISHES[o])?'<span class="pill amber">↷ verschoben</span>':'';
     const skipRow='<div style="display:flex;gap:6px;margin-top:8px">'+slotBtn(dt,'b','🌅','Frühstück')+slotBtn(dt,'l','🥗','Mittag')+'<button class="btn" data-shift="'+dt+'" style="flex:1" title="Abendessen (und alle folgenden) einen Tag nach hinten schieben">↷ 🍽️</button></div>';
-    return '<div class="card"><div class="thumb">'+pic(d)+'</div><div class="body"><div class="daytag">'+dn+' · '+fmt(dt)+nextWeek+'</div><div class="dish">'+esc(d.name)+' '+moved+'</div><div class="meta">'+(d.price!=null?euro(d.price)+' · ':'')+'~'+d.nutri.kcal+' kcal</div><div class="meallines">'+bl+'</div><button class="btn full" data-cook="'+id+'">Kochen</button>'+skipRow+'</div></div>';
+    return '<div class="card"><div class="thumb">'+pic(d)+'</div><div class="body"><div class="daytag">'+dn+' · '+fmt(dt)+nextWeek+'</div><div class="dish">'+esc(d.name)+' '+moved+'</div><div class="meta">'+(d.price!=null?euro(d.price)+' · ':'')+'~'+d.nutri.kcal+' kcal</div><div class="meallines">'+bl+'</div><button class="btn full" data-cook="'+id+'">Kochen</button>'+skipRow+swapSel(dt)+'</div></div>';
   }).join('');
-  app.innerHTML='<section class="view"><p class="eyebrow">Dein Tag, ganze Woche</p><h2 class="section">Wochenplan</h2><p class="lead">Frühstück und Mittag gelten für die ganze Woche, das Abendessen wechselt täglich – zusammen rund 2100 kcal am Tag. Mit „↷" verschiebst du einzelne Mahlzeiten: Das Abendessen rutscht (mit allen folgenden) einen Tag nach hinten, Frühstück und Mittag werden für den Tag ausgesetzt. Alles, was du nicht verschiebst, gilt automatisch als gegessen.</p><div class="grid days">'+cards+'</div></section>';
+  app.innerHTML='<section class="view"><p class="eyebrow">Dein Tag, ganze Woche</p><h2 class="section">Wochenplan</h2><p class="lead">Frühstück und Mittag gelten für die ganze Woche, das Abendessen wechselt täglich – zusammen rund 2100 kcal am Tag. Mit „↷" verschiebst du einzelne Mahlzeiten: Das Abendessen rutscht (mit allen folgenden) einen Tag nach hinten, Frühstück und Mittag werden für den Tag ausgesetzt. Mit „⇄" tauschst du zwei Abendessen direkt (z. B. Pizza am Sonntag statt Samstag). Alles, was du nicht verschiebst, gilt automatisch als gegessen.</p><div class="grid days">'+cards+'</div></section>';
   app.querySelectorAll('[data-cook]').forEach(x=>x.onclick=()=>{cookCurrent=x.dataset.cook; switchView('cook');});
   app.querySelectorAll('[data-shift]').forEach(x=>x.onclick=async()=>{await shiftFrom(x.dataset.shift); toast('Abendessen verschoben ↷'); renderPlan();});
   app.querySelectorAll('[data-unshift]').forEach(x=>x.onclick=async()=>{await unshiftFrom(x.dataset.unshift); toast('Verschiebung aufgehoben'); renderPlan();});
+  app.querySelectorAll('[data-swap]').forEach(s=>s.onchange=async()=>{if(!s.value)return; await swapDinner(s.dataset.swap,s.value); toast('Abendessen getauscht ⇄'); renderPlan();});
   app.querySelectorAll('[data-skipslot]').forEach(x=>x.onclick=async()=>{const p=x.dataset.skipslot.split('|'), dt=p[0], s=p[1];
     slotskips[dt]=slotskips[dt]||{};
     if(slotskips[dt][s]) delete slotskips[dt][s]; else slotskips[dt][s]=true;
@@ -449,6 +452,12 @@ async function unshiftFrom(d){
   Object.keys(overrides).forEach(k=>{ if(overrides[k]!=='skip'&&overrides[k]===plan.dinners[dayNameOf(k)]) delete overrides[k]; });
   await store('overrides_v1',overrides);
 }
+async function swapDinner(a,b){
+  const ia=dinnerIdFor(a), ib=dinnerIdFor(b);
+  overrides[a]=ib||'skip'; overrides[b]=ia||'skip';
+  [a,b].forEach(k=>{ if(overrides[k]!=='skip'&&overrides[k]===plan.dinners[dayNameOf(k)]) delete overrides[k]; });
+  await store('overrides_v1',overrides);
+}
 function slotDishId(s,date){return s==='b'?plan.breakfast:(s==='l'?plan.lunch:dinnerIdFor(date||todayISO()));}
 function logFor(date){if(!log[date])log[date]=[];return log[date];}
 function isEaten(slot,date){return logFor(date).some(e=>e.slot===slot);}
@@ -542,16 +551,26 @@ function renderPantry(){
   });
 }
 
-function buildShopping(){
+function buildShopping(mode){
   const cats={gemuese:{},kuehl:{},vorrat:{},tk:{}}; const staples=new Set();
-  function add(d,mult){ if(!d) return; (d.ing||[]).forEach(p=>{ const item=p[0],qty=p[1],unit=p[2],cat=p[3];
+  function add(d,mult){ if(!d||!mult) return; (d.ing||[]).forEach(p=>{ const item=p[0],qty=p[1],unit=p[2],cat=p[3];
     if(cat==='staple'){staples.add(item); return;}
     if(/knoblauch/i.test(item)){staples.add('Knoblauch'); return;}
     if(/^(rote )?zwiebeln?$/i.test(item.trim())){staples.add('Zwiebeln'); return;} if(!cats[cat])cats[cat]={};
     const key=item.toLowerCase()+'|'+(unit||''); if(!cats[cat][key])cats[cat][key]={item:item,unit:unit||'',qty:0,hasNum:false,count:0};
     const e=cats[cat][key]; e.count+=mult; if(typeof qty==='number'){e.qty+=qty*mult; e.hasNum=true;} }); }
-  add(DISHES[plan.breakfast],7); add(DISHES[plan.lunch],7);
-  DAYS.forEach(day=>add(DISHES[plan.dinners[day]],1));
+  if(mode==='rest'){
+    const wkSun=weekSundayISO(); const dates=[]; let cur=todayISO();
+    while(cur<=wkSun){ dates.push(cur); cur=addDays(cur,1); }
+    while(overrides[cur]){ dates.push(cur); cur=addDays(cur,1); }
+    let nb=0,nl=0;
+    dates.forEach(dt=>{ if(dt<=wkSun){ const sk=slotskips[dt]||{}; if(!sk.b)nb++; if(!sk.l)nl++; }
+      const id=dinnerIdFor(dt); if(id) add(DISHES[id],1); });
+    add(DISHES[plan.breakfast],nb); add(DISHES[plan.lunch],nl);
+  }else{
+    add(DISHES[plan.breakfast],7); add(DISHES[plan.lunch],7);
+    DAYS.forEach(day=>add(DISHES[plan.dinners[day]],1));
+  }
   return {cats:cats,staples:[...staples]};
 }
 const PACKS=[
@@ -597,8 +616,9 @@ function packFor(cat,item,unit){
   if(cat==='tk'&&unit==='g') return {size:450,label:'TK-Beutel (450 g)'};
   return null;
 }
+let shopMode='week';
 function renderShop(){
-  const r=buildShopping(), cats=r.cats, staples=r.staples;
+  const r=buildShopping(shopMode), cats=r.cats, staples=r.staples;
   const labels={gemuese:'🥕 Obst & Gemüse',kuehl:'🧊 Kühlregal · Fleisch, Fisch, Milch, Eier',vorrat:'🥫 Vorräte · Trocken & Dosen',tk:'❄️ Tiefkühl'};
   let html='';
   Object.keys(labels).forEach(cat=>{ const items=Object.values(cats[cat]||{}); if(!items.length) return;
@@ -621,8 +641,10 @@ function renderShop(){
       return '<li class="'+((ck||covered)?'checked':'')+'" data-k="'+esc(key)+'"><input type="checkbox" '+ck+'><label>'+esc(e.item)+'</label><span class="amt">'+esc(amt)+'</span></li>';}).join('');
     html+='<div class="shopgroup"><h4>'+labels[cat]+'</h4><ul class="shop">'+lis+'</ul></div>'; });
   const stap=staples.length?'<div class="callout"><strong>Vorrat checken</strong> – meist im Haus: '+staples.map(esc).join(', ')+'.</div>':'';
-  app.innerHTML='<section class="view"><p class="eyebrow">Für die Woche</p><h2 class="section">Einkaufsliste</h2><p class="lead">Aus dem ganzen Tagesplan – Frühstück und Mittag je 7×, plus die Abendessen. Deine Vorräte werden automatisch abgezogen (Frisches nur, solange es haltbar ist), Mengen sind auf übliche Packungsgrößen aufgerundet. Zwiebeln und Knoblauch stehen nie auf der Liste – die hast du immer da. Häkchen bleiben gespeichert.</p>'+(html||'<div class="empty">🛒 Noch nichts geplant.</div>')+stap+'</section>';
-  app.querySelectorAll('ul.shop li').forEach(li=>{const cb=li.querySelector('input'); cb.onchange=async()=>{li.classList.toggle('checked',cb.checked); shopChecked[li.dataset.k]=cb.checked; await store('shop_v4',shopChecked);};});
+  const tog='<div class="generate"><div class="gtxt"><h3>🗓️ Zeitraum</h3><p>„Ab heute" zählt nur, was du für den Rest der Woche noch brauchst (Verschiebungen und ausgesetzte Mahlzeiten eingerechnet) – gilt nur für diese Ansicht, nächste Woche ist die Liste automatisch wieder komplett.</p></div><div style="display:flex;gap:8px"><button class="btn'+(shopMode==='week'?' primary':'')+'" data-smode="week">Ganze Woche</button><button class="btn'+(shopMode==='rest'?' primary':'')+'" data-smode="rest">Ab heute</button></div></div>';
+  app.innerHTML='<section class="view"><p class="eyebrow">'+(shopMode==='rest'?'Ab heute bis Sonntag':'Für die Woche')+'</p><h2 class="section">Einkaufsliste</h2><p class="lead">Aus dem ganzen Tagesplan – Frühstück und Mittag je 7×, plus die Abendessen. Deine Vorräte werden automatisch abgezogen (Frisches nur, solange es haltbar ist), Mengen sind auf übliche Packungsgrößen aufgerundet. Zwiebeln und Knoblauch stehen nie auf der Liste – die hast du immer da. Häkchen bleiben gespeichert.</p>'+tog+(html||'<div class="empty">🛒 Für den Rest der Woche brauchst du nichts mehr.</div>')+stap+'</section>';
+  app.querySelectorAll('[data-smode]').forEach(b=>b.onclick=()=>{shopMode=b.dataset.smode; renderShop();});
+  app.querySelectorAll('ul.shop li[data-k]').forEach(li=>{const cb=li.querySelector('input'); cb.onchange=async()=>{li.classList.toggle('checked',cb.checked); shopChecked[li.dataset.k]=cb.checked; await store('shop_v4',shopChecked);};});
 }
 function targetFor(k){ if(k==='kcal') return 2100; if(k==='protein') return Math.round(weight*1.5); return RI[k][1]; }
 let nutriMode='plan';
