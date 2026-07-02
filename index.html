@@ -164,9 +164,11 @@
   </div>
   <nav id="nav" role="tablist">
     <button role="tab" data-view="plan" aria-selected="true"><i>🗓️</i>Plan</button>
+    <button role="tab" data-view="today" aria-selected="false"><i>✅</i>Heute</button>
     <button role="tab" data-view="cook" aria-selected="false"><i>👩‍🍳</i>Kochen</button>
     <button role="tab" data-view="create" aria-selected="false"><i>✏️</i>Plan bearbeiten</button>
     <button role="tab" data-view="shop" aria-selected="false"><i>🛒</i>Einkaufsliste</button>
+    <button role="tab" data-view="pantry" aria-selected="false"><i>🧺</i>Vorräte</button>
     <button role="tab" data-view="nutri" aria-selected="false"><i>🥗</i>Nährstoffe</button>
     <button role="tab" data-view="chat" aria-selected="false"><i>💬</i>Fragen</button>
   </nav>
@@ -174,7 +176,6 @@
 <div class="wrap"><main id="app"></main></div>
 <div class="toast" id="toast"></div>
 <script>
-const WM=(f)=>'https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(f)+'?width=500';
 const MDB=(f)=>'https://www.themealdb.com/images/media/meals/'+f;
 function illo(kind){
   const c={tomato:'#D2502F',yolk:'#F2B441',veg:'#6FA84B',potato:'#E3C27A',brown:'#8A5A3B',rice:'#F3EEDF',soup:'#E0913A',green:'#2E6B43',cream:'#FBF6EA',plate:'#FFFFFF',berry:'#B5446E'};
@@ -210,10 +211,10 @@ function pic(d, cls){
 */
 const DISHES={
   // ---------- Frühstück (~550 kcal) ----------
-  'b-quark':{meal:'b',name:'Quark-Müsli mit Banane, Haferflocken & Honig',illo:'yogurt',photo:WM('Yogurt, fruit, granola bowl (34999358091).jpg'),time:'5 Min',price:1.30,tags:['Eiweiß','Calcium'],nutri:{kcal:540,protein:42,fiber:7,iron:3,calcium:400,vitc:12},ing:[['Magerquark',300,'g','kuehl'],['Banane',1,'','gemuese'],['Haferflocken',40,'g','vorrat'],['Nüsse',10,'g','vorrat'],['Honig',null,'','staple']],steps:['Quark mit einem Schluck Milch cremig rühren.','Haferflocken und Bananenscheiben daraufgeben.','Nüsse hacken und mit Honig darübergeben.']},
-  'b-porridge':{meal:'b',name:'Porridge mit Apfel, Zimt & Erdnussbutter',illo:'oatbowl',photo:WM('Oatmeal (1).jpg'),time:'10 Min',price:0.90,tags:['Ballaststoffe','Günstig'],nutri:{kcal:560,protein:22,fiber:11,iron:4,calcium:380,vitc:8},ing:[['Haferflocken',60,'g','vorrat'],['Milch',300,'ml','kuehl'],['Apfel',1,'','gemuese'],['Erdnussbutter',15,'g','vorrat'],['Leinsamen (geschrotet)',10,'g','vorrat'],['Zimt',null,'','staple']],steps:['Haferflocken in Milch 3–4 Min köcheln.','Erdnussbutter und Leinsamen einrühren.','Apfel würfeln oder reiben, mit Zimt darübergeben.']},
-  'b-ruehrei':{meal:'b',name:'Rührei mit Vollkornbrot, Tomate & Käse',illo:'eggs',photo:WM('Scrambled eggs.jpg'),time:'10 Min',price:1.60,tags:['Eiweiß','Schnell'],nutri:{kcal:550,protein:35,fiber:7,iron:4,calcium:330,vitc:20},ing:[['Eier',3,'','kuehl'],['Vollkornbrot',2,'Scheiben','vorrat'],['Käse (gerieben)',30,'g','kuehl'],['Tomate',1,'','gemuese'],['Schnittlauch',null,'','staple'],['Butter',null,'','staple'],['Salz & Pfeffer',null,'','staple']],steps:['Eier verquirlen, salzen, Käse unterrühren.','In Butter bei mittlerer Hitze cremig stocken lassen.','Mit Brot, Tomatenscheiben und Schnittlauch servieren.']},
-  'b-onoats':{meal:'b',name:'Overnight Oats mit Joghurt & Beeren',illo:'oatbowl',photo:WM('Cereal, Yoghurt, Berries & Banana (4372854652).jpg'),time:'5 Min + über Nacht',price:1.40,tags:['Meal-Prep','Calcium'],nutri:{kcal:560,protein:26,fiber:10,iron:4,calcium:420,vitc:25},ing:[['Haferflocken',60,'g','vorrat'],['Milch',200,'ml','kuehl'],['Naturjoghurt',150,'g','kuehl'],['Beeren (TK)',100,'g','tk'],['Nüsse',15,'g','vorrat'],['Honig',null,'','staple']],steps:['Abends Haferflocken mit Milch und Joghurt verrühren, kalt stellen.','Morgens Beeren und Nüsse daraufgeben.','Mit Honig süßen.']},
+  'b-pancakes':{meal:'b',name:'Quark-Bananen-Pancakes mit Joghurt',illo:'oatbowl',photo:MDB('sywswr1511383814.jpg'),time:'15 Min',price:1.40,tags:['Eiweiß','Süß'],nutri:{kcal:560,protein:36,fiber:8,iron:3.5,calcium:350,vitc:12},ing:[['Haferflocken',50,'g','vorrat'],['Magerquark',150,'g','kuehl'],['Eier',2,'','kuehl'],['Banane',1,'','gemuese'],['Naturjoghurt',100,'g','kuehl'],['Backpulver',null,'','staple'],['Öl',null,'','staple'],['Honig',null,'','staple']],steps:['Haferflocken fein mixen und mit Quark, Eiern, zerdrückter Banane und Backpulver verrühren.','Kleine Pancakes in wenig Öl von beiden Seiten goldbraun backen.','Mit Joghurt und Honig servieren.']},
+  'b-frenchtoast':{meal:'b',name:'Armer Ritter aus Vollkornbrot mit Beeren',illo:'toast',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/French_toast_001.jpg/500px-French_toast_001.jpg',time:'10 Min',price:1.30,tags:['Süß','Resteverwertung'],nutri:{kcal:570,protein:28,fiber:8,iron:3.5,calcium:380,vitc:30},ing:[['Vollkornbrot',3,'Scheiben','vorrat'],['Eier',2,'','kuehl'],['Milch',100,'ml','kuehl'],['Naturjoghurt',150,'g','kuehl'],['Beeren (TK)',100,'g','tk'],['Zimt',null,'','staple'],['Butter',null,'','staple'],['Honig',null,'','staple']],steps:['Eier mit Milch und Zimt verquirlen.','Brotscheiben darin tränken und in Butter goldbraun braten.','Mit Joghurt, aufgetauten Beeren und Honig servieren.']},
+  'b-milchreis':{meal:'b',name:'Milchreis mit Zimt, Apfelmus & Quark',illo:'oatbowl',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Milchreis.jpg/500px-Milchreis.jpg',time:'25 Min · gut vorzukochen',price:1.00,tags:['Calcium','Günstig'],nutri:{kcal:560,protein:28,fiber:6,iron:2.5,calcium:480,vitc:10},ing:[['Milchreis',70,'g','vorrat'],['Milch',400,'ml','kuehl'],['Magerquark',100,'g','kuehl'],['Apfelmus',100,'g','vorrat'],['Leinsamen (geschrotet)',10,'g','vorrat'],['Zimt & Honig',null,'','staple']],steps:['Milchreis in Milch ~25 Min sanft köcheln, öfter umrühren.','Quark und Leinsamen unterrühren.','Mit Apfelmus und Zimt servieren – schmeckt auch kalt vom Vortag.']},
+  'b-griess':{meal:'b',name:'Grießbrei mit Beeren & Mandeln',illo:'oatbowl',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Griessbrei.jpg/500px-Griessbrei.jpg',time:'10 Min',price:0.90,tags:['Calcium','Günstig'],nutri:{kcal:550,protein:24,fiber:6,iron:3,calcium:450,vitc:25},ing:[['Weichweizengrieß',70,'g','vorrat'],['Milch',450,'ml','kuehl'],['Beeren (TK)',100,'g','tk'],['Mandeln',15,'g','vorrat'],['Zimt & Honig',null,'','staple']],steps:['Milch aufkochen und Grieß einrühren.','3–5 Min quellen lassen, dabei rühren.','Mit Beeren, gehackten Mandeln, Zimt und Honig servieren.']},
   // ---------- Mittagessen (~700 kcal) ----------
   'l-bowl':{meal:'l',name:'Couscous-Bowl mit Kichererbsen, Gemüse & Feta',illo:'salad',photo:MDB('02s6gc1763799560.jpg'),time:'15 Min',price:2.20,tags:['Ballaststoffe','Vegetarisch'],nutri:{kcal:700,protein:30,fiber:14,iron:6,calcium:350,vitc:75},ing:[['Couscous',80,'g','vorrat'],['Kichererbsen',0.5,'Dose','vorrat'],['Paprika',1,'','gemuese'],['Gurke',0.5,'','gemuese'],['Feta',50,'g','kuehl'],['Zitrone',0.5,'','gemuese'],['Olivenöl',null,'','staple'],['Salz & Pfeffer',null,'','staple']],steps:['Couscous mit kochendem Wasser übergießen und quellen lassen.','Gemüse würfeln, Kichererbsen abspülen.','Alles mit Olivenöl und Zitrone mischen, Feta darüberbröseln.']},
   'l-salat':{meal:'l',name:'Thunfisch-Salat Nizza-Art mit Ei & Kartoffeln',illo:'salad',photo:MDB('yypwwq1511304979.jpg'),time:'20 Min',price:2.80,tags:['Eiweiß','Omega-3'],nutri:{kcal:690,protein:46,fiber:10,iron:5,calcium:240,vitc:70},ing:[['Thunfisch',1,'Dose','vorrat'],['Eier',2,'','kuehl'],['Kartoffeln',250,'g','gemuese'],['grüne Bohnen (TK)',150,'g','tk'],['Blattsalat & Tomate',1,'Portion','gemuese'],['Oliven',30,'g','vorrat'],['Olivenöl',null,'','staple'],['Senf & Essig',null,'','staple']],steps:['Kartoffeln und Eier kochen, Bohnen mitgaren.','Dressing aus Öl, Senf und Essig rühren.','Salat, Kartoffeln, Bohnen, Thunfisch, Ei-Hälften und Oliven anrichten.']},
@@ -224,38 +225,38 @@ const DISHES={
   'hack-bolo':{meal:'d',name:'Hackfleisch-Bolognese mit Spaghetti',illo:'pasta',photo:MDB('sutysw1468247559.jpg'),time:'35 Min',price:2.80,tags:['Eiweiß','Meal-Prep'],batch:'Koch die doppelte Saucenmenge – dann ist Mittwoch nur noch Pasta zu kochen.',nutri:{kcal:860,protein:46,fiber:11,iron:6,calcium:200,vitc:35},ing:[['Hackfleisch (gemischt)',200,'g','kuehl'],['passierte Tomaten',1,'Dose','vorrat'],['Zwiebel',1,'','gemuese'],['Knoblauch',1,'Zehe','gemuese'],['Möhre',1,'','gemuese'],['Tomatenmark',1,'EL','vorrat'],['Vollkornspaghetti',120,'g','vorrat'],['Parmesan',20,'g','kuehl'],['Olivenöl',null,'','staple'],['Oregano, Salz & Pfeffer',null,'','staple']],steps:['Zwiebel, Knoblauch und Möhre würfeln, in Öl anbraten.','Hack dazugeben und krümelig braten, Tomatenmark mitrösten.','Tomaten und einen Schuss Wasser zugeben, 20 Min köcheln, kräftig würzen.','Pasta kochen, mit Sauce und Parmesan servieren.']},
   'haehnchen-curry':{meal:'d',name:'Hähnchen-Gemüse-Curry mit Reis',illo:'curry',photo:MDB('yxsurp1511304301.jpg'),time:'30 Min',price:3.20,tags:['Eiweiß','Gemüse'],nutri:{kcal:850,protein:52,fiber:8,iron:4,calcium:150,vitc:60},ing:[['Hähnchenbrust',200,'g','kuehl'],['Paprika',1,'','gemuese'],['Zucchini',0.5,'','gemuese'],['Zwiebel',1,'','gemuese'],['Kokosmilch (light)',200,'ml','vorrat'],['Currypaste oder -pulver',1.5,'EL','vorrat'],['Reis',90,'g','vorrat'],['Naturjoghurt',100,'g','kuehl'],['Öl',null,'','staple']],steps:['Reis kochen.','Hähnchen würfeln und scharf anbraten, herausnehmen.','Gemüse anbraten, Currypaste mitrösten, Kokosmilch angießen.','Hähnchen zurückgeben, 10 Min köcheln, Joghurt-Klecks dazu.']},
   'haehnchen-reis':{meal:'d',name:'Hähnchen-Reispfanne mit buntem Gemüse',illo:'rice',photo:MDB('wuyd2h1765655837.jpg'),time:'25 Min',price:3.00,tags:['Eiweiß','Ein-Topf'],nutri:{kcal:840,protein:52,fiber:9,iron:4,calcium:120,vitc:70},ing:[['Hähnchenbrust',200,'g','kuehl'],['Reis',90,'g','vorrat'],['TK-Gemüse (Erbsen, Mais, Paprika)',250,'g','tk'],['Zwiebel',1,'','gemuese'],['Knoblauch',1,'Zehe','gemuese'],['Ei',1,'','kuehl'],['Sojasauce',2,'EL','vorrat'],['Öl',null,'','staple']],steps:['Reis kochen.','Hähnchen würfeln und anbraten, Zwiebel und Knoblauch dazu.','TK-Gemüse mitgaren, Ei einrühren und stocken lassen.','Reis und Sojasauce unterheben.']},
-  'ofengemuese':{meal:'d',name:'Ofengemüse mit Feta, Kartoffeln & Quark-Dip',illo:'sheet',photo:WM('Roasted vegetables.jpg'),time:'40 Min',price:2.80,tags:['Gemüse','Vegetarisch','Calcium'],nutri:{kcal:820,protein:32,fiber:14,iron:4.5,calcium:450,vitc:150},ing:[['Kartoffeln',350,'g','gemuese'],['Paprika',1,'','gemuese'],['Zucchini',0.5,'','gemuese'],['Brokkoli',200,'g','gemuese'],['rote Zwiebel',1,'','gemuese'],['Feta',100,'g','kuehl'],['Magerquark',150,'g','kuehl'],['Kürbiskerne',15,'g','vorrat'],['Olivenöl',null,'','staple'],['Paprikapulver, Salz & Pfeffer',null,'','staple']],steps:['Ofen auf 200 °C. Kartoffeln und Gemüse in Stücke schneiden.','Mit Öl und Gewürzen mischen, 30 Min backen.','Feta darüberbröseln, 5 Min weiterbacken.','Quark mit Salz und Kräutern als Dip anrühren, Kerne darüberstreuen.']},
-  'ofenkartoffel':{meal:'d',name:'Ofenkartoffel mit Kräuterquark, Käse & Salat',illo:'potato',photo:WM('Baked potato with quark, Oberauroff.jpg'),time:'60 Min · wenig Arbeit',price:2.00,tags:['Vegetarisch','Calcium','Günstig'],nutri:{kcal:800,protein:38,fiber:12,iron:3.5,calcium:420,vitc:60},ing:[['große Kartoffeln',2,'','gemuese'],['Magerquark',250,'g','kuehl'],['Käse (gerieben)',40,'g','kuehl'],['Schnittlauch / Kräuter',1,'Bund','gemuese'],['Blattsalat, Gurke & Tomate',1,'Portion','gemuese'],['Leinöl oder Olivenöl',1,'EL','vorrat'],['Salz & Pfeffer',null,'','staple']],steps:['Ofen auf 200 °C, Kartoffeln einstechen und 50–60 Min backen.','Quark mit Kräutern, Salz und Pfeffer verrühren.','Salat mit Öl-Dressing anmachen.','Kartoffeln einschneiden, mit Quark füllen und Käse darüberstreuen.']},
+  'ofengemuese':{meal:'d',name:'Ofengemüse mit Feta, Kartoffeln & Quark-Dip',illo:'sheet',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roasted_vegetables.jpg/500px-Roasted_vegetables.jpg',time:'40 Min',price:2.80,tags:['Gemüse','Vegetarisch','Calcium'],nutri:{kcal:820,protein:32,fiber:14,iron:4.5,calcium:450,vitc:150},ing:[['Kartoffeln',350,'g','gemuese'],['Paprika',1,'','gemuese'],['Zucchini',0.5,'','gemuese'],['Brokkoli',200,'g','gemuese'],['rote Zwiebel',1,'','gemuese'],['Feta',100,'g','kuehl'],['Magerquark',150,'g','kuehl'],['Kürbiskerne',15,'g','vorrat'],['Olivenöl',null,'','staple'],['Paprikapulver, Salz & Pfeffer',null,'','staple']],steps:['Ofen auf 200 °C. Kartoffeln und Gemüse in Stücke schneiden.','Mit Öl und Gewürzen mischen, 30 Min backen.','Feta darüberbröseln, 5 Min weiterbacken.','Quark mit Salz und Kräutern als Dip anrühren, Kerne darüberstreuen.']},
+  'ofenkartoffel':{meal:'d',name:'Ofenkartoffel mit Kräuterquark, Käse & Salat',illo:'potato',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Baked_potato_with_quark%2C_Oberauroff.jpg/500px-Baked_potato_with_quark%2C_Oberauroff.jpg',time:'60 Min · wenig Arbeit',price:2.00,tags:['Vegetarisch','Calcium','Günstig'],nutri:{kcal:800,protein:38,fiber:12,iron:3.5,calcium:420,vitc:60},ing:[['große Kartoffeln',2,'','gemuese'],['Magerquark',250,'g','kuehl'],['Käse (gerieben)',40,'g','kuehl'],['Schnittlauch / Kräuter',1,'Bund','gemuese'],['Blattsalat, Gurke & Tomate',1,'Portion','gemuese'],['Leinöl oder Olivenöl',1,'EL','vorrat'],['Salz & Pfeffer',null,'','staple']],steps:['Ofen auf 200 °C, Kartoffeln einstechen und 50–60 Min backen.','Quark mit Kräutern, Salz und Pfeffer verrühren.','Salat mit Öl-Dressing anmachen.','Kartoffeln einschneiden, mit Quark füllen und Käse darüberstreuen.']},
   'hack-bolo-rest':{meal:'d',name:'Hackfleisch-Bolognese (Reste vom Montag)',illo:'pasta',photo:MDB('sutysw1468247559.jpg'),time:'15 Min',price:0.80,tags:['Meal-Prep','Schnell'],leftoverOf:'hack-bolo',nutri:{kcal:860,protein:46,fiber:11,iron:6,calcium:200,vitc:35},ing:[['Vollkornspaghetti',120,'g','vorrat'],['Parmesan',20,'g','kuehl']],steps:['Reste der Bolognese erwärmen.','Frische Pasta kochen.','Mischen, mit Parmesan abschmecken.']},
   'shakshuka':{meal:'d',name:'Shakshuka mit Feta & Vollkornbrot',illo:'shak',photo:MDB('wpkfin1763597958.jpg'),time:'25 Min',price:2.40,tags:['Eiweiß','Vegetarisch'],nutri:{kcal:830,protein:40,fiber:10,iron:6.5,calcium:350,vitc:100},ing:[['Eier',4,'','kuehl'],['passierte Tomaten',1,'Dose','vorrat'],['Paprika',1,'','gemuese'],['Zwiebel',1,'','gemuese'],['Knoblauch',1,'Zehe','gemuese'],['Feta',75,'g','kuehl'],['Vollkornbrot',3,'Scheiben','vorrat'],['Paprikapulver & Kreuzkümmel',null,'','staple'],['Olivenöl',null,'','staple']],steps:['Zwiebel, Paprika und Knoblauch in Öl anbraten.','Mit Paprikapulver und Kreuzkümmel würzen, Tomaten zugeben, 10 Min köcheln.','Mulden formen, Eier hineingeben, zugedeckt 6–8 Min stocken.','Feta darüberbröseln, mit Brot servieren.']},
   'gebratener-reis':{meal:'d',name:'Gebratener Reis mit Ei, Erbsen & Gemüse',illo:'rice',photo:MDB('hblwvg1763478203.jpg'),time:'20 Min',price:1.80,tags:['Schnell','Resteverwertung'],nutri:{kcal:820,protein:34,fiber:9,iron:4.5,calcium:130,vitc:70},ing:[['Reis',100,'g','vorrat'],['Eier',3,'','kuehl'],['TK-Erbsen',150,'g','tk'],['Paprika',1,'','gemuese'],['Frühlingszwiebeln',2,'','gemuese'],['Sojasauce',2,'EL','vorrat'],['Erdnüsse',20,'g','vorrat'],['Öl',null,'','staple']],steps:['Reis kochen (oder Reste vom Vortag nehmen).','Paprika und Frühlingszwiebeln anbraten, Erbsen dazu.','Eier einrühren und stocken lassen.','Reis und Sojasauce unterheben, Erdnüsse darüber.']},
-  'kichererbsen-curry':{meal:'d',name:'Kichererbsen-Blumenkohl-Curry mit Reis',illo:'curry',photo:WM('Curried cauliflower and chickpea stew.jpg'),time:'30 Min',price:2.20,tags:['Ballaststoffe','Vegan möglich','Meal-Prep'],batch:'2–3-fache Menge kochen – ergibt die Reste für Freitag und friert gut ein.',nutri:{kcal:860,protein:30,fiber:18,iron:7.5,calcium:250,vitc:80},ing:[['Kichererbsen',1.5,'Dosen','vorrat'],['Blumenkohl',300,'g','gemuese'],['Kokosmilch',200,'ml','vorrat'],['passierte Tomaten',200,'g','vorrat'],['Zwiebel',1,'','gemuese'],['Knoblauch',2,'Zehen','gemuese'],['Currypulver/-paste',2,'EL','vorrat'],['Reis',90,'g','vorrat'],['Naturjoghurt',100,'g','kuehl'],['Öl & Salz',null,'','staple']],steps:['Zwiebel und Knoblauch anbraten, Curry kurz mitrösten.','Blumenkohl-Röschen, Tomaten, Kokosmilch und Kichererbsen zugeben.','15–20 Min köcheln, salzen.','Reis kochen, mit Joghurt-Klecks servieren.']},
-  'thunfisch-pasta':{meal:'d',name:'Vollkornnudeln mit Thunfisch-Tomatensauce',illo:'pasta',photo:WM('Pasta with tomato sauce, capers and tuna (50540741211).jpg'),time:'20 Min',price:2.50,tags:['Eiweiß','Omega-3','Schnell'],nutri:{kcal:850,protein:48,fiber:11,iron:5.5,calcium:180,vitc:40},ing:[['Vollkornnudeln',130,'g','vorrat'],['Thunfisch',1,'Dose','vorrat'],['passierte Tomaten',1,'Dose','vorrat'],['Zwiebel',1,'','gemuese'],['Knoblauch',1,'Zehe','gemuese'],['TK-Spinat',150,'g','tk'],['Parmesan',20,'g','kuehl'],['Olivenöl',null,'','staple'],['Oregano & Chiliflocken',null,'','staple']],steps:['Zwiebel und Knoblauch anbraten, Tomaten und Spinat zugeben.','10 Min köcheln, würzen, Thunfisch unterrühren.','Nudeln kochen, mischen, Parmesan darüber.']},
-  'pilz-risotto':{meal:'d',name:'Pilz-Risotto mit Parmesan & grünem Salat',illo:'rice',photo:WM('Mushroom Risotto (4789415965).jpg'),time:'35 Min',price:2.60,tags:['Vegetarisch','Wohlfühlessen'],nutri:{kcal:800,protein:28,fiber:8,iron:4,calcium:320,vitc:30},ing:[['Risottoreis',100,'g','vorrat'],['Champignons',250,'g','gemuese'],['Zwiebel',1,'','gemuese'],['Gemüsebrühe',600,'ml','vorrat'],['Parmesan',40,'g','kuehl'],['Blattsalat & Tomate',1,'Portion','gemuese'],['Olivenöl',null,'','staple'],['Salz & Pfeffer',null,'','staple']],steps:['Zwiebel und Pilze in Öl anbraten.','Reis zugeben und glasig anschwitzen.','Nach und nach Brühe angießen und rühren, bis der Reis cremig ist (~20 Min).','Parmesan unterrühren, mit Salat servieren.']},
-  'bratkartoffeln':{meal:'d',name:'Bratkartoffeln mit Spiegelei & Gurkensalat',illo:'eggs',photo:WM('Bratkartoffeln mit Spinat, Fleischkäse, Spiegelei.jpg'),time:'30 Min',price:1.70,tags:['Wohlfühlessen','Günstig'],nutri:{kcal:820,protein:32,fiber:9,iron:4,calcium:200,vitc:45},ing:[['Kartoffeln',450,'g','gemuese'],['Eier',3,'','kuehl'],['Zwiebel',1,'','gemuese'],['Gurke',0.5,'','gemuese'],['Naturjoghurt',100,'g','kuehl'],['Dill (getrocknet ok)',null,'','staple'],['Öl',null,'','staple'],['Salz & Pfeffer',null,'','staple']],steps:['Kartoffeln in Scheiben schneiden und in Öl knusprig braten, Zwiebel dazu.','Gurke hobeln, mit Joghurt, Dill und Salz zum Salat anmachen.','Spiegeleier braten und alles anrichten.']},
-  'curry-rest':{meal:'d',name:'Kichererbsen-Curry (Reste vom Donnerstag)',illo:'curry',photo:WM('Curried cauliflower and chickpea stew.jpg'),time:'15 Min',price:0.60,tags:['Meal-Prep','Schnell'],leftoverOf:'kichererbsen-curry',nutri:{kcal:860,protein:30,fiber:18,iron:7.5,calcium:250,vitc:80},ing:[['Reis',90,'g','vorrat'],['Naturjoghurt',100,'g','kuehl']],steps:['Curry-Reste erwärmen.','Frischen Reis kochen.','Mit Joghurt-Klecks servieren.']},
-  'chili':{meal:'d',name:'Chili con Carne mit Reis',illo:'meat',photo:MDB('uuqvwu1504629254.jpg'),time:'35 Min',price:2.80,tags:['Eiweiß','Eisen','Meal-Prep'],batch:'Große Menge kochen – friert portionsweise super ein.',nutri:{kcal:860,protein:45,fiber:16,iron:7,calcium:180,vitc:60},ing:[['Hackfleisch (mager)',180,'g','kuehl'],['Kidneybohnen',1,'Dose','vorrat'],['Mais',0.5,'Dose','vorrat'],['passierte Tomaten',1,'Dose','vorrat'],['Zwiebel',1,'','gemuese'],['Paprika',1,'','gemuese'],['Reis',80,'g','vorrat'],['Naturjoghurt (Klecks)',75,'g','kuehl'],['Chili & Kreuzkümmel',null,'','staple'],['Öl',null,'','staple']],steps:['Hack und Zwiebel scharf anbraten.','Paprika dazu, kurz mitbraten.','Tomaten, Bohnen und Mais zugeben, 20 Min köcheln, kräftig würzen.','Reis kochen, mit Joghurt-Klecks servieren.']},
-  'frikadellen':{meal:'d',name:'Frikadellen mit Kartoffeln & Erbsen-Möhren',illo:'meat',photo:WM('Frikadelle (28082008).JPG'),time:'35 Min',price:2.90,tags:['Eiweiß','Einfrierbar'],batch:'Form ein paar Frikadellen mehr und friere sie roh oder gebraten ein.',nutri:{kcal:850,protein:48,fiber:10,iron:5.5,calcium:200,vitc:50},ing:[['Hackfleisch (gemischt)',200,'g','kuehl'],['Zwiebel',1,'','gemuese'],['Ei',1,'','kuehl'],['Haferflocken (statt Brösel)',3,'EL','vorrat'],['Senf',1,'TL','vorrat'],['Kartoffeln',350,'g','gemuese'],['Erbsen & Möhren (TK)',250,'g','tk'],['Naturjoghurt',75,'g','kuehl'],['Öl',null,'','staple'],['Salz & Pfeffer',null,'','staple']],steps:['Hack mit Zwiebel, Ei, Haferflocken, Senf, Salz und Pfeffer kneten.','Frikadellen formen und braten.','Kartoffeln kochen, Gemüse garen.','Joghurt mit Kräutern als Dip anrühren.']},
-  'suppe':{meal:'d',name:'Kartoffel-Gemüse-Suppe mit Käsebrot',illo:'soup',photo:WM('Parmesan potato soup topped with bacon.jpg'),time:'35 Min',price:2.00,tags:['Günstig','Einfrierbar'],batch:'Große Menge kochen – friert portionsweise super ein.',nutri:{kcal:780,protein:32,fiber:12,iron:4,calcium:400,vitc:60},ing:[['Kartoffeln',350,'g','gemuese'],['Möhren',2,'','gemuese'],['Lauch',1,'Stange','gemuese'],['Zwiebel',1,'','gemuese'],['Gemüsebrühe',750,'ml','vorrat'],['Schmelz- oder Frischkäse',50,'g','kuehl'],['Vollkornbrot',2,'Scheiben','vorrat'],['Käse',40,'g','kuehl'],['Öl',null,'','staple'],['Salz, Pfeffer & Muskat',null,'','staple']],steps:['Gemüse würfeln und in Öl andünsten.','Mit Brühe 20 Min köcheln, pürieren.','Frischkäse einrühren, abschmecken.','Brot mit Käse überbacken oder belegt dazu essen.']},
-  'veggie-chili':{meal:'d',name:'Vegetarisches Chili mit Bohnen & Reis',illo:'meat',photo:MDB('wqurxy1511453156.jpg'),time:'30 Min',price:2.20,tags:['Ballaststoffe','Vegan möglich','Günstig'],nutri:{kcal:820,protein:32,fiber:19,iron:7.5,calcium:250,vitc:75},ing:[['Kidneybohnen',1,'Dose','vorrat'],['weiße Bohnen oder Linsen',0.5,'Dose','vorrat'],['Mais',0.5,'Dose','vorrat'],['passierte Tomaten',1,'Dose','vorrat'],['Zwiebel',1,'','gemuese'],['Paprika',1,'','gemuese'],['Reis',80,'g','vorrat'],['Käse (gerieben)',30,'g','kuehl'],['Chili & Kreuzkümmel',null,'','staple'],['Öl',null,'','staple']],steps:['Zwiebel und Paprika anbraten, Gewürze mitrösten.','Tomaten, Bohnen und Mais zugeben, 20 Min köcheln.','Reis kochen.','Mit Käse bestreut servieren.']},
-  'kartoffel-auflauf':{meal:'d',name:'Kartoffel-Hack-Auflauf mit Käse & Erbsen',illo:'potato',photo:MDB('08ez421782683409.jpg'),time:'50 Min',price:2.50,tags:['Günstig','Sonntagsessen','Einfrierbar'],nutri:{kcal:850,protein:42,fiber:10,iron:4.5,calcium:400,vitc:60},ing:[['Kartoffeln',400,'g','gemuese'],['Hackfleisch (gemischt)',150,'g','kuehl'],['Zwiebel',1,'','gemuese'],['Erbsen & Möhren (TK)',200,'g','tk'],['Milch',100,'ml','kuehl'],['Käse (gerieben)',60,'g','kuehl'],['passierte Tomaten',200,'g','vorrat'],['Öl',null,'','staple'],['Salz, Pfeffer & Paprikapulver',null,'','staple']],steps:['Kartoffelscheiben 10 Min vorkochen, Ofen auf 200 °C.','Hack mit Zwiebel anbraten, Tomaten und TK-Gemüse zugeben, würzen.','Kartoffeln und Hackmasse in eine Form schichten, Milch angießen.','Käse darüberstreuen und 25 Min überbacken.']},
-  'gefuellte-paprika':{meal:'d',name:'Gefüllte Paprika mit Hack, Reis & Käse',illo:'sheetC',photo:MDB('w0rsga1782683912.jpg'),time:'50 Min',price:3.00,tags:['Eiweiß','Vitamin C','Ofen'],nutri:{kcal:840,protein:42,fiber:10,iron:5.5,calcium:280,vitc:140},ing:[['Paprika',2,'','gemuese'],['Hackfleisch (mager)',150,'g','kuehl'],['Reis',70,'g','vorrat'],['Zwiebel',1,'','gemuese'],['passierte Tomaten',250,'g','vorrat'],['Käse (gerieben)',50,'g','kuehl'],['Öl',null,'','staple'],['Salz, Pfeffer & Paprikapulver',null,'','staple']],steps:['Reis vorkochen, Ofen auf 200 °C.','Hack und Zwiebel anbraten, mit Reis und etwas Tomate mischen.','Paprika halbieren, entkernen und füllen.','Mit restlichen Tomaten übergießen, Käse darüber, 30–35 Min backen.']},
-  'haehnchen-couscous':{meal:'d',name:'Hähnchen mit Couscous & geschmortem Gemüse',illo:'rice',photo:MDB('qxytrx1511304021.jpg'),time:'30 Min',price:3.00,tags:['Eiweiß','Orientalisch'],nutri:{kcal:830,protein:48,fiber:11,iron:4.5,calcium:180,vitc:70},ing:[['Hähnchenbrust',180,'g','kuehl'],['Couscous',90,'g','vorrat'],['Zucchini',0.5,'','gemuese'],['Paprika',1,'','gemuese'],['Zwiebel',1,'','gemuese'],['Kichererbsen',0.5,'Dose','vorrat'],['Zitrone',0.5,'','gemuese'],['Olivenöl',null,'','staple'],['Ras el Hanout oder Paprikapulver',null,'','staple']],steps:['Hähnchen würzen und anbraten, herausnehmen.','Gemüse in derselben Pfanne schmoren, Kichererbsen dazu.','Couscous mit kochendem Wasser quellen lassen.','Alles mischen, mit Zitrone abschmecken.']},
+  'linsen-dal':{meal:'d',name:'Rotes Linsen-Dal mit Reis & Joghurt',illo:'curry',photo:MDB('wuxrtu1483564410.jpg'),time:'30 Min',price:1.80,tags:['Eisen','Ballaststoffe','Meal-Prep'],batch:'2–3-fache Menge kochen – ergibt die Reste für Freitag und friert gut ein.',nutri:{kcal:850,protein:34,fiber:17,iron:8,calcium:250,vitc:40},ing:[['rote Linsen',150,'g','vorrat'],['Zwiebel',1,'','gemuese'],['Knoblauch',2,'Zehen','gemuese'],['Ingwer',1,'Stück','gemuese'],['Kokosmilch',150,'ml','vorrat'],['passierte Tomaten',200,'g','vorrat'],['Curry & Kurkuma',null,'','staple'],['Reis',90,'g','vorrat'],['Naturjoghurt',100,'g','kuehl'],['Öl & Salz',null,'','staple']],steps:['Zwiebel, Knoblauch und Ingwer anbraten, Gewürze mitrösten.','Linsen, Tomaten, Kokosmilch und ~300 ml Wasser zugeben.','15–20 Min köcheln, salzen.','Reis kochen, mit Joghurt-Klecks servieren.']},
+  'kaesespaetzle':{meal:'d',name:'Käsespätzle mit Röstzwiebeln & Salat',illo:'pasta',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/K%C3%A4sesp%C3%A4tzle_mit_Zwiebeln_und_Beilagensalat.JPG/500px-K%C3%A4sesp%C3%A4tzle_mit_Zwiebeln_und_Beilagensalat.JPG',time:'25 Min',price:2.30,tags:['Calcium','Wohlfühlessen'],nutri:{kcal:880,protein:34,fiber:5,iron:2.5,calcium:550,vitc:25},ing:[['Spätzle (Kühlregal)',250,'g','kuehl'],['Bergkäse oder Gouda',80,'g','kuehl'],['Zwiebeln',2,'','gemuese'],['Blattsalat & Gurke',1,'Portion','gemuese'],['Butter',null,'','staple'],['Salz & Pfeffer',null,'','staple']],steps:['Zwiebelringe in Butter langsam goldbraun rösten.','Spätzle in der Pfanne erhitzen, Käse portionsweise unterheben.','Mit Röstzwiebeln und angemachtem Salat servieren.']},
+  'fischstaebchen':{meal:'d',name:'Fischstäbchen mit Kartoffelpüree & Erbsen',illo:'fish',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Fish_fingers_as_a_convenience_food.jpg/500px-Fish_fingers_as_a_convenience_food.jpg',time:'25 Min',price:2.60,tags:['Schnell','Klassiker'],nutri:{kcal:840,protein:38,fiber:10,iron:3,calcium:250,vitc:40},ing:[['Fischstäbchen',8,'','tk'],['Kartoffeln',400,'g','gemuese'],['Milch',100,'ml','kuehl'],['TK-Erbsen',200,'g','tk'],['Zitrone',0.5,'','gemuese'],['Butter',null,'','staple'],['Salz & Muskat',null,'','staple']],steps:['Kartoffeln weich kochen und mit Milch und Butter zu Püree stampfen.','Fischstäbchen in der Pfanne oder im Ofen knusprig garen.','Erbsen garen, alles mit Zitrone servieren.']},
+  'dal-rest':{meal:'d',name:'Linsen-Dal (Reste vom Donnerstag)',illo:'curry',photo:MDB('wuxrtu1483564410.jpg'),time:'15 Min',price:0.60,tags:['Meal-Prep','Schnell'],leftoverOf:'linsen-dal',nutri:{kcal:850,protein:34,fiber:17,iron:8,calcium:250,vitc:40},ing:[['Reis',90,'g','vorrat'],['Naturjoghurt',100,'g','kuehl']],steps:['Dal-Reste erwärmen.','Frischen Reis kochen.','Mit Joghurt-Klecks servieren.']},
+  'tortilla':{meal:'d',name:'Spanische Tortilla mit Paprika-Salat',illo:'eggs',photo:MDB('quuxsx1511476154.jpg'),time:'30 Min',price:1.80,tags:['Vegetarisch','Günstig'],nutri:{kcal:820,protein:32,fiber:8,iron:4,calcium:220,vitc:90},ing:[['Kartoffeln',350,'g','gemuese'],['Eier',4,'','kuehl'],['Zwiebel',1,'','gemuese'],['Paprika',1,'','gemuese'],['Blattsalat',1,'Portion','gemuese'],['Olivenöl',null,'','staple'],['Salz & Pfeffer',null,'','staple']],steps:['Kartoffelscheiben in Öl weich braten, Zwiebel dazu.','Verquirlte Eier darübergießen und bei kleiner Hitze stocken lassen.','Mit dem Teller-Trick wenden und fertig garen.','Paprika-Salat anmachen und dazu servieren.']},
+  'nudelauflauf':{meal:'d',name:'Brokkoli-Nudelauflauf mit Käse & Schinken',illo:'pasta',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Nudelauflauf.JPG/500px-Nudelauflauf.JPG',time:'40 Min',price:2.30,tags:['Calcium','Einfrierbar'],nutri:{kcal:860,protein:40,fiber:9,iron:3.5,calcium:450,vitc:90},ing:[['Nudeln',120,'g','vorrat'],['Brokkoli',300,'g','gemuese'],['Kochschinken',50,'g','kuehl'],['Milch',150,'ml','kuehl'],['Frischkäse',50,'g','kuehl'],['Käse (gerieben)',60,'g','kuehl'],['Salz, Pfeffer & Muskat',null,'','staple']],steps:['Nudeln und Brokkoli-Röschen vorkochen, Ofen auf 200 °C.','Milch mit Frischkäse zur Sauce verrühren, würzen.','Alles mit Schinkenwürfeln mischen und in eine Form geben.','Käse darüber und 20 Min überbacken.']},
+  'erbseneintopf':{meal:'d',name:'Erbseneintopf mit Würstchen & Brot',illo:'soup',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Pea_soup_2.jpg/500px-Pea_soup_2.jpg',time:'50 Min',price:2.00,tags:['Ballaststoffe','Einfrierbar','Günstig'],batch:'Große Menge kochen – friert portionsweise super ein.',nutri:{kcal:830,protein:38,fiber:18,iron:5,calcium:200,vitc:30},ing:[['Schälerbsen (getrocknet)',150,'g','vorrat'],['Kartoffeln',200,'g','gemuese'],['Möhren',2,'','gemuese'],['Lauch',0.5,'Stange','gemuese'],['Zwiebel',1,'','gemuese'],['Gemüsebrühe',800,'ml','vorrat'],['Wiener Würstchen',2,'','kuehl'],['Vollkornbrot',2,'Scheiben','vorrat'],['Majoran',null,'','staple'],['Öl',null,'','staple']],steps:['Gemüse würfeln und in Öl andünsten.','Schälerbsen und Brühe zugeben, 40 Min köcheln.','Teilweise pürieren, Würstchenscheiben darin erwärmen.','Mit Majoran abschmecken, Brot dazu.']},
+  'pizza':{meal:'d',name:'Selbstgemachte Gemüse-Pizza',illo:'sheet',photo:MDB('x0lk931587671540.jpg'),time:'30 Min',price:2.00,tags:['Wohlfühlessen','Günstig'],nutri:{kcal:880,protein:34,fiber:8,iron:4,calcium:400,vitc:60},ing:[['Pizzateig (Kühlregal)',0.5,'Rolle','kuehl'],['passierte Tomaten',150,'g','vorrat'],['Käse (gerieben)',100,'g','kuehl'],['Paprika',1,'','gemuese'],['Champignons',100,'g','gemuese'],['Mais',0.5,'Dose','vorrat'],['Oregano',null,'','staple']],steps:['Ofen auf 220 °C, Teig ausrollen.','Mit Tomaten bestreichen und würzen.','Gemüse und Käse darauf verteilen.','12–15 Min knusprig backen.']},
+  'geschnetzeltes':{meal:'d',name:'Puten-Geschnetzeltes in Champignon-Rahm mit Spätzle',illo:'meat',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Z%C3%BCrcher_Geschnetzeltes_mit_Sp%C3%A4tzle.jpg/500px-Z%C3%BCrcher_Geschnetzeltes_mit_Sp%C3%A4tzle.jpg',time:'30 Min',price:3.00,tags:['Eiweiß','Wohlfühlessen'],nutri:{kcal:850,protein:48,fiber:6,iron:3.5,calcium:220,vitc:20},ing:[['Putenbrust',180,'g','kuehl'],['Champignons',200,'g','gemuese'],['Zwiebel',1,'','gemuese'],['Sahne oder Kochcreme',100,'ml','kuehl'],['Spätzle (Kühlregal)',200,'g','kuehl'],['Öl',null,'','staple'],['Salz, Pfeffer & Paprikapulver',null,'','staple']],steps:['Putenstreifen scharf anbraten und herausnehmen.','Zwiebel und Pilze in derselben Pfanne braten.','Mit Sahne ablöschen, Pute zurückgeben, abschmecken.','Spätzle erhitzen und dazu servieren.']},
+  'lasagne':{meal:'d',name:'Lasagne mit grünem Salat',illo:'pasta',photo:MDB('wtsvxx1511296896.jpg'),time:'60 Min',price:2.90,tags:['Sonntagsessen','Einfrierbar'],nutri:{kcal:900,protein:45,fiber:8,iron:5,calcium:400,vitc:40},ing:[['Hackfleisch (gemischt)',200,'g','kuehl'],['Lasagneplatten',6,'','vorrat'],['passierte Tomaten',1,'Dose','vorrat'],['Zwiebel',1,'','gemuese'],['Möhre',1,'','gemuese'],['Milch',300,'ml','kuehl'],['Butter & Mehl (Béchamel)',null,'','staple'],['Käse (gerieben)',60,'g','kuehl'],['Blattsalat',1,'Portion','gemuese'],['Salz, Pfeffer & Muskat',null,'','staple']],steps:['Hack mit Zwiebel und Möhre anbraten, Tomaten zugeben, 15 Min köcheln.','Aus Butter, Mehl und Milch eine Béchamel rühren.','Hacksauce, Platten und Béchamel schichten, Käse obendrauf.','Bei 180 °C ~30 Min backen, mit Salat servieren.']},
+  'gefuellte-zucchini':{meal:'d',name:'Gefüllte Zucchini mit Hack & Reis',illo:'sheetC',photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Gef%C3%BCllte_Zucchini_1.jpg/500px-Gef%C3%BCllte_Zucchini_1.jpg',time:'45 Min',price:2.60,tags:['Eiweiß','Ofen'],nutri:{kcal:830,protein:40,fiber:9,iron:5,calcium:300,vitc:70},ing:[['Zucchini',2,'','gemuese'],['Hackfleisch (mager)',150,'g','kuehl'],['Reis',70,'g','vorrat'],['Zwiebel',1,'','gemuese'],['passierte Tomaten',250,'g','vorrat'],['Käse (gerieben)',50,'g','kuehl'],['Öl',null,'','staple'],['Salz, Pfeffer & Oregano',null,'','staple']],steps:['Reis vorkochen, Ofen auf 200 °C.','Zucchini längs halbieren und aushöhlen.','Hack mit Zwiebel und Zucchini-Fruchtfleisch anbraten, mit Reis und etwas Tomate mischen.','Füllen, mit Tomaten übergießen, Käse darüber, 25 Min backen.']},
+  'teriyaki-haehnchen':{meal:'d',name:'Teriyaki-Hähnchen mit Reis & Brokkoli',illo:'rice',photo:MDB('wvpsxx1468256321.jpg'),time:'30 Min',price:3.00,tags:['Eiweiß','Asiatisch'],nutri:{kcal:840,protein:50,fiber:8,iron:3.5,calcium:150,vitc:90},ing:[['Hähnchenbrust',200,'g','kuehl'],['Reis',90,'g','vorrat'],['Brokkoli',300,'g','gemuese'],['Sojasauce',3,'EL','vorrat'],['Honig',1,'EL','vorrat'],['Knoblauch',1,'Zehe','gemuese'],['Ingwer',1,'Stück','gemuese'],['Sesam',null,'','staple'],['Öl',null,'','staple']],steps:['Reis kochen, Brokkoli dämpfen.','Hähnchenwürfel anbraten.','Sojasauce, Honig, Knoblauch und Ingwer zu einer Glasur einkochen.','Alles mischen und mit Sesam bestreuen.']},
 };
 const DAYS=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
 const DINNER_OPTIONS={
   Montag:['hack-bolo','lachs-ofen','haehnchen-curry'],
   Dienstag:['haehnchen-reis','ofengemuese','ofenkartoffel'],
   Mittwoch:['hack-bolo-rest','shakshuka','gebratener-reis'],
-  Donnerstag:['kichererbsen-curry','thunfisch-pasta','pilz-risotto'],
-  Freitag:['curry-rest','bratkartoffeln','chili'],
-  Samstag:['frikadellen','suppe','veggie-chili'],
-  Sonntag:['kartoffel-auflauf','gefuellte-paprika','haehnchen-couscous']
+  Donnerstag:['linsen-dal','kaesespaetzle','fischstaebchen'],
+  Freitag:['dal-rest','tortilla','nudelauflauf'],
+  Samstag:['erbseneintopf','pizza','geschnetzeltes'],
+  Sonntag:['lasagne','gefuellte-zucchini','teriyaki-haehnchen']
 };
-const BREAKFASTS=['b-quark','b-porridge','b-ruehrei','b-onoats'];
+const BREAKFASTS=['b-pancakes','b-frenchtoast','b-milchreis','b-griess'];
 const LUNCHES=['l-bowl','l-salat','l-wrap','l-linsen'];
-const SUBS={'hack-bolo':'doppelte Menge → Reste Mi','hack-bolo-rest':'nur aufwärmen','kichererbsen-curry':'3 Portionen → Reste Fr','curry-rest':'kein Aufwand'};
-const DEFAULT_DINNERS={Montag:'hack-bolo',Dienstag:'haehnchen-reis',Mittwoch:'hack-bolo-rest',Donnerstag:'kichererbsen-curry',Freitag:'curry-rest',Samstag:'frikadellen',Sonntag:'kartoffel-auflauf'};
+const SUBS={'hack-bolo':'doppelte Menge → Reste Mi','hack-bolo-rest':'nur aufwärmen','linsen-dal':'2–3 Portionen → Reste Fr','dal-rest':'kein Aufwand'};
+const DEFAULT_DINNERS={Montag:'hack-bolo',Dienstag:'haehnchen-reis',Mittwoch:'hack-bolo-rest',Donnerstag:'linsen-dal',Freitag:'dal-rest',Samstag:'erbseneintopf',Sonntag:'lasagne'};
 const RI={kcal:['Energie',2100,'kcal'],protein:['Eiweiß',55,'g'],fiber:['Ballaststoffe',30,'g'],iron:['Eisen',14,'mg'],calcium:['Calcium',1000,'mg'],vitc:['Vitamin C',90,'mg']};
 const mem={};
 // Speichert auf dem Server (Netlify Function + Blobs) und zusätzlich lokal als Fallback.
@@ -276,9 +277,10 @@ async function load(k,fb){
   try{ const r=localStorage.getItem('wk_'+k); if(r!=null) return JSON.parse(r); }catch(e){}
   return (k in mem)?mem[k]:fb;
 }
-let plan={dinners:Object.assign({},DEFAULT_DINNERS),breakfast:'b-quark',lunch:'l-bowl'};
+let plan={dinners:Object.assign({},DEFAULT_DINNERS),breakfast:'b-pancakes',lunch:'l-bowl'};
 let draft=JSON.parse(JSON.stringify(plan));
 let shopChecked={}, cookCurrent=null, chatHistory=[], pendingChat='', weight=72;
+let log={}, pantry={};
 async function askClaude(messages, system, maxTokens){
   const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:messages,system:system,max_tokens:maxTokens||1500})});
   const data=await res.json();
@@ -311,12 +313,12 @@ function renderCreate(){
   function paint(){
     app.querySelectorAll('.opt').forEach(o=>{ const id=o.dataset.id; const sel=o.dataset.day?draft.dinners[o.dataset.day]===id:(o.dataset.pick==='b'?draft.breakfast===id:draft.lunch===id); o.setAttribute('aria-pressed',sel); });
     const rMi=draft.dinners.Mittwoch==='hack-bolo-rest'&&draft.dinners.Montag!=='hack-bolo';
-    const rFr=draft.dinners.Freitag==='curry-rest'&&draft.dinners.Donnerstag!=='kichererbsen-curry';
-    let n=''; if(rMi)n+='Hinweis: Mittwochs-Reste brauchen die Bolognese vom Montag. '; if(rFr)n+='Hinweis: Freitags-Reste brauchen das Curry vom Donnerstag.';
+    const rFr=draft.dinners.Freitag==='dal-rest'&&draft.dinners.Donnerstag!=='linsen-dal';
+    let n=''; if(rMi)n+='Hinweis: Mittwochs-Reste brauchen die Bolognese vom Montag. '; if(rFr)n+='Hinweis: Freitags-Reste brauchen das Dal vom Donnerstag.';
     const el=app.querySelector('#draftnote'); if(el) el.textContent=n;
   }
   app.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{ const id=o.dataset.id; if(o.dataset.day) draft.dinners[o.dataset.day]=id; else if(o.dataset.pick==='b') draft.breakfast=id; else draft.lunch=id; paint(); });
-  app.querySelector('#resetDraft').onclick=()=>{ draft={dinners:Object.assign({},DEFAULT_DINNERS),breakfast:'b-quark',lunch:'l-bowl'}; renderCreate(); };
+  app.querySelector('#resetDraft').onclick=()=>{ draft={dinners:Object.assign({},DEFAULT_DINNERS),breakfast:'b-pancakes',lunch:'l-bowl'}; renderCreate(); };
   app.querySelector('#saveDraft').onclick=async()=>{
     const btn=app.querySelector('#saveDraft'); btn.disabled=true; btn.textContent='Speichere…';
     plan=JSON.parse(JSON.stringify(draft));
@@ -363,6 +365,88 @@ function renderCook(){
   app.querySelectorAll('.cooknav button').forEach(b=>b.onclick=()=>{cookCurrent=b.dataset.id; renderCook(); window.scrollTo({top:0,behavior:'smooth'});});
   app.querySelectorAll('ol.steps li span').forEach(s=>s.onclick=()=>s.parentElement.classList.toggle('done'));
 }
+function todayISO(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function dayName(){return DAYS[(new Date().getDay()+6)%7];}
+function lastDays(n){const a=[];for(let i=0;i<n;i++){const d=new Date();d.setDate(d.getDate()-i);a.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));}return a;}
+function slotDishId(s){return s==='b'?plan.breakfast:(s==='l'?plan.lunch:plan.dinners[dayName()]);}
+function logFor(date){if(!log[date])log[date]=[];return log[date];}
+function isEaten(slot){return logFor(todayISO()).some(e=>e.slot===slot);}
+function pantryAdjust(ing,sign){(ing||[]).forEach(p=>{if(typeof p[1]!=='number'||p[3]==='staple')return;const key=p[0].toLowerCase()+'|'+(p[2]||'');if(pantry[key]){pantry[key].qty=Math.max(0,Math.round((pantry[key].qty+sign*p[1])*10)/10);}});}
+async function toggleEaten(slot){
+  const entries=logFor(todayISO()), i=entries.findIndex(e=>e.slot===slot);
+  if(i>=0){const d=DISHES[entries[i].id]; entries.splice(i,1); if(d)pantryAdjust(d.ing,1);}
+  else{const id=slotDishId(slot), d=DISHES[id]; if(!d)return; entries.push({slot:slot,id:id,name:d.name,nutri:d.nutri}); pantryAdjust(d.ing,-1);}
+  await store('log_v1',log); await store('pantry_v1',pantry);
+}
+function numIn(id,label,w){return '<label style="font-size:12px;color:var(--muted)">'+label+'<br><input id="'+id+'" type="number" min="0" step="any" placeholder="0" style="width:'+(w||86)+'px;font-family:var(--body);font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></label>';}
+function renderToday(){
+  const t=todayISO();
+  const slots=[['b','🌅 Frühstück'],['l','🥗 Mittag'],['d','🍽️ Abendessen']];
+  const rows=slots.map(s=>{const id=slotDishId(s[0]),d=DISHES[id]; if(!d)return''; const on=isEaten(s[0]);
+    return '<li class="'+(on?'checked':'')+'"><input type="checkbox" data-slot="'+s[0]+'" id="sl'+s[0]+'" '+(on?'checked':'')+'><label for="sl'+s[0]+'">'+s[1]+': '+esc(d.name)+'</label><span class="amt">'+d.nutri.kcal+' kcal</span></li>';}).join('');
+  const xs=logFor(t).filter(e=>e.slot==='x');
+  const extras=xs.map((e,i)=>'<li><label>➕ '+esc(e.name)+'</label><span class="amt">'+Math.round(e.nutri.kcal||0)+' kcal</span><button class="btn" data-delx="'+i+'" style="padding:2px 10px;margin-left:8px">✕</button></li>').join('');
+  const sum={kcal:0,protein:0}; logFor(t).forEach(e=>{sum.kcal+=e.nutri.kcal||0; sum.protein+=e.nutri.protein||0;});
+  app.innerHTML='<section class="view"><p class="eyebrow">'+dayName()+' · '+t+'</p><h2 class="section">Heute</h2><p class="lead">Hak ab, was du gegessen hast – das zieht die Zutaten automatisch von deinen Vorräten ab und zählt für die Nährstoff-Auswertung. Snacks oder Essen außer Haus trägst du unten ein.</p>'
+  +'<div class="shopgroup"><h4>Aus deinem Plan</h4><ul class="shop">'+rows+'</ul></div>'
+  +'<div class="shopgroup"><h4>Außerhalb des Plans</h4><ul class="shop">'+(extras||'<li><label style="color:var(--muted)">Noch nichts eingetragen.</label></li>')+'</ul></div>'
+  +'<div class="generate" style="align-items:flex-end;gap:12px;flex-wrap:wrap"><div class="gtxt" style="min-width:100%;flex-basis:100%"><h3>➕ Anderes Essen eintragen</h3><p>Nur Name und kcal sind Pflicht – der Rest macht die Auswertung genauer.</p></div>'
+  +'<label style="font-size:12px;color:var(--muted)">Name<br><input id="xName" type="text" placeholder="z. B. Döner" style="width:170px;font-family:var(--body);font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></label>'
+  +numIn('xKcal','kcal')+numIn('xP','Eiweiß (g)')+numIn('xFib','Ballastst. (g)')+numIn('xFe','Eisen (mg)')+numIn('xCa','Calcium (mg)')+numIn('xC','Vit. C (mg)')
+  +'<button class="btn primary" id="xAdd">Eintragen</button></div>'
+  +'<div class="callout">Heute bisher: <strong>'+Math.round(sum.kcal)+' kcal</strong> · '+Math.round(sum.protein)+' g Eiweiß. Auswertung unter „Nährstoffe", Bestand unter „Vorräte".</div></section>';
+  app.querySelectorAll('input[data-slot]').forEach(cb=>cb.onchange=async()=>{await toggleEaten(cb.dataset.slot); renderToday();});
+  app.querySelectorAll('[data-delx]').forEach(b=>b.onclick=async()=>{const i=+b.dataset.delx; const list=logFor(t); let n=-1;
+    for(let j=0;j<list.length;j++){ if(list[j].slot==='x'){n++; if(n===i){list.splice(j,1); break;}} }
+    await store('log_v1',log); renderToday();});
+  app.querySelector('#xAdd').onclick=async()=>{
+    const g=(id)=>parseFloat(app.querySelector('#'+id).value)||0;
+    const name=app.querySelector('#xName').value.trim(), kcal=g('xKcal');
+    if(!name||!kcal){toast('Bitte mindestens Name und kcal angeben.'); return;}
+    logFor(t).push({slot:'x',name:name,nutri:{kcal:kcal,protein:g('xP'),fiber:g('xFib'),iron:g('xFe'),calcium:g('xCa'),vitc:g('xC')}});
+    await store('log_v1',log); toast('Eingetragen ✓'); renderToday();
+  };
+}
+function renderPantry(){
+  const keys=Object.keys(pantry).filter(k=>pantry[k]).sort((a,b)=>pantry[a].item.localeCompare(pantry[b].item));
+  const lis=keys.map(k=>{const e=pantry[k];
+    return '<li data-k="'+esc(k)+'"><label>'+esc(e.item)+'</label><input type="number" min="0" step="any" value="'+e.qty+'" style="width:84px;font-family:var(--body);font-size:14px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"><span class="amt" style="min-width:52px">'+esc(e.unit||'Stück')+'</span><button class="btn" data-rm style="padding:2px 10px">✕</button></li>';}).join('');
+  app.innerHTML='<section class="view"><p class="eyebrow">Was ist noch da?</p><h2 class="section">Vorräte</h2><p class="lead">Trag ein, was du eingekauft hast. Hakst du unter „Heute" eine Mahlzeit ab, werden die Rezept-Zutaten automatisch abgezogen – so siehst du jederzeit, was und wie viel du noch zu Hause hast.</p>'
+  +'<div class="generate" style="align-items:flex-end;gap:12px;flex-wrap:wrap"><div class="gtxt" style="min-width:100%;flex-basis:100%"><h3>🛒 Einkauf eintragen</h3><p>Einzeln eintragen – oder alles in der Einkaufsliste Abgehakte auf einmal übernehmen.</p></div>'
+  +'<label style="font-size:12px;color:var(--muted)">Zutat<br><input id="pName" type="text" placeholder="z. B. Reis" style="width:170px;font-family:var(--body);font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></label>'
+  +numIn('pQty','Menge',96)
+  +'<label style="font-size:12px;color:var(--muted)">Einheit<br><input id="pUnit" type="text" placeholder="g, ml, Dose …" style="width:110px;font-family:var(--body);font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></label>'
+  +'<button class="btn primary" id="pAdd">Hinzufügen</button><button class="btn" id="pImport">Abgehakte Einkäufe übernehmen</button></div>'
+  +'<div class="shopgroup"><h4>Aktueller Bestand</h4>'+(lis?'<ul class="shop">'+lis+'</ul>':'<div class="empty">🧺 Noch keine Vorräte eingetragen.</div>')+'</div>'
+  +'<div class="callout">Abgezogen wird, was in den Rezepten steht (gleiche Bezeichnung und Einheit). Basics wie Öl, Salz und Gewürze zählen nicht mit. Mengen kannst du hier jederzeit von Hand korrigieren.</div></section>';
+  app.querySelector('#pAdd').onclick=async()=>{
+    const name=app.querySelector('#pName').value.trim(), qty=parseFloat(app.querySelector('#pQty').value)||0, unit=app.querySelector('#pUnit').value.trim();
+    if(!name||!qty){toast('Bitte Zutat und Menge angeben.'); return;}
+    const key=name.toLowerCase()+'|'+unit;
+    if(!pantry[key]) pantry[key]={item:name,unit:unit,qty:0};
+    pantry[key].qty=Math.round((pantry[key].qty+qty)*10)/10;
+    await store('pantry_v1',pantry); toast('Eingetragen ✓'); renderPantry();
+  };
+  app.querySelector('#pImport').onclick=async()=>{
+    const r=buildShopping(); let n=0;
+    Object.keys(r.cats).forEach(cat=>Object.values(r.cats[cat]).forEach(e=>{
+      const sk=cat+'|'+e.item; if(!shopChecked[sk]) return;
+      const qty=e.hasNum?e.qty:e.count; const key=e.item.toLowerCase()+'|'+(e.unit||'');
+      if(!pantry[key]) pantry[key]={item:e.item,unit:e.unit||'',qty:0};
+      pantry[key].qty=Math.round((pantry[key].qty+qty)*10)/10;
+      shopChecked[sk]=false; n++;
+    }));
+    if(!n){toast('Nichts abgehakt – setz erst Häkchen in der Einkaufsliste.'); return;}
+    await store('pantry_v1',pantry); await store('shop_v4',shopChecked);
+    toast(n+' Artikel in die Vorräte übernommen ✓'); renderPantry();
+  };
+  app.querySelectorAll('ul.shop li[data-k]').forEach(li=>{
+    const k=li.dataset.k;
+    li.querySelector('input').onchange=async(ev)=>{pantry[k].qty=Math.max(0,parseFloat(ev.target.value)||0); await store('pantry_v1',pantry);};
+    li.querySelector('[data-rm]').onclick=async()=>{delete pantry[k]; await store('pantry_v1',pantry); renderPantry();};
+  });
+}
+
 function buildShopping(){
   const cats={gemuese:{},kuehl:{},vorrat:{},tk:{}}; const staples=new Set();
   function add(d,mult){ if(!d) return; (d.ing||[]).forEach(p=>{ const item=p[0],qty=p[1],unit=p[2],cat=p[3];
@@ -388,18 +472,37 @@ function renderShop(){
   app.querySelectorAll('ul.shop li').forEach(li=>{const cb=li.querySelector('input'); cb.onchange=async()=>{li.classList.toggle('checked',cb.checked); shopChecked[li.dataset.k]=cb.checked; await store('shop_v4',shopChecked);};});
 }
 function targetFor(k){ if(k==='kcal') return 2100; if(k==='protein') return Math.round(weight*1.5); return RI[k][1]; }
+let nutriMode='plan';
 function renderNutri(){
-  const dinAvg={kcal:0,protein:0,fiber:0,iron:0,calcium:0,vitc:0};
-  DAYS.forEach(day=>{const n=DISHES[plan.dinners[day]].nutri; for(const k in dinAvg) dinAvg[k]+=n[k]/7;});
-  const b=DISHES[plan.breakfast].nutri, l=DISHES[plan.lunch].nutri;
-  const day={}; for(const k in RI){ day[k]=dinAvg[k]+b[k]+l[k]; }
+  const modes=[['plan','📋 Plan (Soll)'],['day','Heute'],['week','Ø 7 Tage'],['month','Ø 30 Tage']];
+  let day={}, note='', entries=1;
+  if(nutriMode==='plan'){
+    const dinAvg={kcal:0,protein:0,fiber:0,iron:0,calcium:0,vitc:0};
+    DAYS.forEach(dy=>{const n=DISHES[plan.dinners[dy]].nutri; for(const k in dinAvg) dinAvg[k]+=n[k]/7;});
+    const b=DISHES[plan.breakfast].nutri, l=DISHES[plan.lunch].nutri;
+    for(const k in RI){ day[k]=dinAvg[k]+b[k]+l[k]; }
+    note='Ø pro Tag laut Plan (Frühstück + Mittag + Abendessen).';
+  }else{
+    const n=nutriMode==='day'?1:(nutriMode==='week'?7:30);
+    entries=0; for(const k in RI) day[k]=0;
+    lastDays(n).forEach(dt=>{(log[dt]||[]).forEach(e=>{entries++; for(const k in RI) day[k]+=(e.nutri&&e.nutri[k])||0;});});
+    for(const k in RI) day[k]/=n;
+    note=nutriMode==='day'?'Heute tatsächlich gegessen (unter „Heute" abgehakt).':'Ø pro Tag über die letzten '+n+' Tage, berechnet aus deinen abgehakten Mahlzeiten.';
+  }
+  const chips=modes.map(m=>'<button class="chip" data-mode="'+m[0]+'"'+(nutriMode===m[0]?' style="background:var(--green);color:#fff"':'')+'>'+m[1]+'</button>').join('');
   const bars=Object.keys(RI).map(k=>{ const label=RI[k][0],unit=RI[k][2],ri=targetFor(k); const pct=Math.round(day[k]/ri*100); const w=Math.min(100,pct); const cls=pct>=95?'full':'';
     return '<div class="nutrow"><div class="top"><span class="nm">'+label+'</span><span class="vl">'+Math.round(day[k])+' / '+ri+' '+unit+' · '+pct+'%</span></div><div class="bar"><span class="'+cls+'" style="width:'+w+'%"></span></div></div>';}).join('');
-  app.innerHTML='<section class="view"><p class="eyebrow">Ganzer Tag</p><h2 class="section">Nährstoff-Deckung</h2><p class="lead">Ziel: rund 2100 kcal und '+Math.round(weight*1.5)+' g Eiweiß (1,5 g/kg) pro Tag, dazu Ballaststoffe, Eisen, Calcium und Vitamin C. Angezeigt wird der Ø pro Tag über Frühstück, Mittag und Abendessen.</p>'
-    +'<div class="generate"><div class="gtxt"><h3>Dein Gewicht</h3><p>Passt das Eiweißziel automatisch an.</p></div><div style="display:flex;align-items:center;gap:8px"><input id="wIn" type="number" min="40" max="160" value="'+weight+'" style="width:84px;font-family:var(--body);font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"> kg</div></div>'
-    +'<div class="nutbars">'+bars+'</div><div class="callout">Mit deinem aktuellen Plan liegst du bei rund '+Math.round(day.kcal)+' kcal und '+Math.round(day.protein)+' g Eiweiß pro Tag. Ist die Calcium-Leiste mal niedrig, hilft ein Frühstück mit Skyr/Quark oder ein Glas Milch extra. Grobe Schätzwerte, keine individuelle Ernährungsberatung.</div></section>';
+  const empty=(nutriMode!=='plan'&&entries===0)?'<div class="infobar"><i>ℹ️</i><div>Noch keine Daten in diesem Zeitraum – hak unter „Heute" ab, was du isst, dann füllt sich die Auswertung.</div></div>':'';
+  const weightBox=nutriMode==='plan'?'<div class="generate"><div class="gtxt"><h3>Dein Gewicht</h3><p>Passt das Eiweißziel automatisch an.</p></div><div style="display:flex;align-items:center;gap:8px"><input id="wIn" type="number" min="40" max="160" value="'+weight+'" style="width:84px;font-family:var(--body);font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)"> kg</div></div>':'';
+  const callout=nutriMode==='plan'
+    ?'<div class="callout">Mit deinem aktuellen Plan liegst du bei rund '+Math.round(day.kcal)+' kcal und '+Math.round(day.protein)+' g Eiweiß pro Tag. Grobe Schätzwerte, keine individuelle Ernährungsberatung.</div>'
+    :'<div class="callout">'+entries+' Einträge im Zeitraum. Extra-Essen zählt nur mit den Werten, die du beim Eintragen angegeben hast.</div>';
+  app.innerHTML='<section class="view"><p class="eyebrow">Ganzer Tag</p><h2 class="section">Nährstoff-Deckung</h2><p class="lead">Ziel: rund 2100 kcal und '+Math.round(weight*1.5)+' g Eiweiß (1,5 g/kg) pro Tag. '+note+'</p><div class="chips">'+chips+'</div>'+empty+weightBox
+    +'<div class="nutbars">'+bars+'</div>'+callout+'</section>';
+  app.querySelectorAll('[data-mode]').forEach(c=>c.onclick=()=>{nutriMode=c.dataset.mode; renderNutri();});
   const wi=app.querySelector('#wIn'); if(wi) wi.onchange=async()=>{ let v=parseInt(wi.value,10); if(!v||v<40)v=40; if(v>160)v=160; weight=v; await store('weight_v4',weight); renderNutri(); };
 }
+
 function planSummary(){ return 'Frühstück: '+DISHES[plan.breakfast].name+'; Mittag: '+DISHES[plan.lunch].name+'; Abendessen – '+DAYS.map(d=>d+': '+DISHES[plan.dinners[d]].name).join(', '); }
 function renderChat(){
   const chips=['Wie peppe ich mein Abendessen auf?','Ersatz für Feta?','Mach Mittwoch vegetarisch','Wie friere ich Reste ein?'];
@@ -423,20 +526,22 @@ function renderChat(){
   app.querySelector('#chatSend').onclick=send;
   input.addEventListener('keydown',e=>{if(e.key==='Enter')send();});
 }
-const VIEWS={plan:renderPlan,cook:renderCook,create:renderCreate,shop:renderShop,nutri:renderNutri,chat:renderChat};
+const VIEWS={plan:renderPlan,today:renderToday,cook:renderCook,create:renderCreate,shop:renderShop,pantry:renderPantry,nutri:renderNutri,chat:renderChat};
 function switchView(v){ document.querySelectorAll('#nav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.view===v)); if(v==='create') draft=JSON.parse(JSON.stringify(plan)); VIEWS[v](); window.scrollTo({top:0,behavior:'smooth'}); }
 document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
 let toastT; function toast(m){const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600);}
 (async function init(){
   const custom=await load('custom_v4',{}); Object.assign(DISHES,custom);
-  plan=await load('plan_v4',{dinners:Object.assign({},DEFAULT_DINNERS),breakfast:'b-quark',lunch:'l-bowl'});
-  if(!plan||!plan.dinners) plan={dinners:Object.assign({},DEFAULT_DINNERS),breakfast:'b-quark',lunch:'l-bowl'};
+  plan=await load('plan_v4',{dinners:Object.assign({},DEFAULT_DINNERS),breakfast:'b-pancakes',lunch:'l-bowl'});
+  if(!plan||!plan.dinners) plan={dinners:Object.assign({},DEFAULT_DINNERS),breakfast:'b-pancakes',lunch:'l-bowl'};
   DAYS.forEach(d=>{ if(!DISHES[plan.dinners[d]]) plan.dinners[d]=DEFAULT_DINNERS[d]; });
-  if(!DISHES[plan.breakfast]) plan.breakfast='b-quark';
+  if(!DISHES[plan.breakfast]) plan.breakfast='b-pancakes';
   if(!DISHES[plan.lunch]) plan.lunch='l-bowl';
   shopChecked=await load('shop_v4',{});
   weight=await load('weight_v4',72);
   chatHistory=await load('chat_v4',[]);
+  log=await load('log_v1',{});
+  pantry=await load('pantry_v1',{});
   draft=JSON.parse(JSON.stringify(plan));
   renderPlan();
 })();
