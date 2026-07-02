@@ -312,24 +312,20 @@ function renderPlan(){
   const fmt=(dt)=>dt.slice(8,10)+'.'+dt.slice(5,7)+'.';
   const slotBtn=(dt,s,icon,label)=>{const on=slotskips[dt]&&slotskips[dt][s];
     return '<button class="btn" data-skipslot="'+dt+'|'+s+'" style="flex:1;'+(on?'background:var(--amber-soft);border-color:var(--amber);color:#7a4d10':'')+'" title="'+(on?label+' wieder einplanen':label+' an diesem Tag verschieben (zählt dann nicht als gegessen)')+'">'+(on?'↩':'↷')+' '+icon+'</button>';};
-  const swapSel=(dt)=>{const opts=dates.filter(x=>x!==dt).map(x=>'<option value="'+x+'">'+dayNameOf(x)+' '+fmt(x)+'</option>').join('');
-    return '<select data-swap="'+dt+'" title="Abendessen mit einem anderen Tag tauschen" style="width:100%;margin-top:6px;font-family:var(--body);font-size:13px;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--muted)"><option value="">⇄ Abendessen tauschen mit …</option>'+opts+'</select>';};
   const cards=dates.map(dt=>{
     const dn=dayNameOf(dt), o=overrides[dt], nextWeek=dt>wkSun?' (nächste Woche)':'';
     const sk=slotskips[dt]||{};
     const bl='🌅 <b>Frühstück:</b> '+esc(b.name)+(sk.b?' <span class="pill amber">↷ verschoben</span>':'')+'<br>🥗 <b>Mittag:</b> '+esc(l.name)+(sk.l?' <span class="pill amber">↷ verschoben</span>':'');
-    if(o==='skip') return '<div class="card"><div class="body"><div class="daytag">'+dn+' · '+fmt(dt)+nextWeek+'</div><div class="dish">🚫 Abend kochfrei</div><div class="meallines">Das Abendessen wurde verschoben.<br>'+bl+'</div><button class="btn full" data-unshift="'+dt+'">Verschiebung aufheben</button><div style="display:flex;gap:6px;margin-top:8px">'+slotBtn(dt,'b','🌅','Frühstück')+slotBtn(dt,'l','🥗','Mittag')+'</div>'+swapSel(dt)+'</div></div>';
+    if(o==='skip') return '<div class="card"><div class="body"><div class="daytag">'+dn+' · '+fmt(dt)+nextWeek+'</div><div class="dish">🚫 Abend kochfrei</div><div class="meallines">Das Abendessen wurde verschoben.<br>'+bl+'</div><button class="btn full" data-unshift="'+dt+'">Verschiebung aufheben</button><div style="display:flex;gap:6px;margin-top:8px">'+slotBtn(dt,'b','🌅','Frühstück')+slotBtn(dt,'l','🥗','Mittag')+'</div></div></div>';
     const id=dinnerIdFor(dt), d=DISHES[id]; if(!d) return '';
     const moved=(o&&DISHES[o])?'<span class="pill amber">↷ verschoben</span>':'';
     const skipRow='<div style="display:flex;gap:6px;margin-top:8px">'+slotBtn(dt,'b','🌅','Frühstück')+slotBtn(dt,'l','🥗','Mittag')+'<button class="btn" data-shift="'+dt+'" style="flex:1" title="Abendessen (und alle folgenden) einen Tag nach hinten schieben">↷ 🍽️</button></div>';
-    return '<div class="card"><div class="thumb">'+pic(d)+'</div><div class="body"><div class="daytag">'+dn+' · '+fmt(dt)+nextWeek+'</div><div class="dish">'+esc(d.name)+' '+moved+'</div><div class="meta">'+(d.price!=null?euro(d.price)+' · ':'')+'~'+d.nutri.kcal+' kcal</div><div class="meallines">'+bl+'</div><button class="btn full" data-cook="'+id+'">Kochen</button>'+skipRow+swapSel(dt)+'</div></div>';
+    return '<div class="card"><div class="thumb">'+pic(d)+'</div><div class="body"><div class="daytag">'+dn+' · '+fmt(dt)+nextWeek+'</div><div class="dish">'+esc(d.name)+' '+moved+'</div><div class="meta">'+(d.price!=null?euro(d.price)+' · ':'')+'~'+d.nutri.kcal+' kcal</div><div class="meallines">'+bl+'</div><button class="btn full" data-cook="'+id+'">Kochen</button>'+skipRow+'</div></div>';
   }).join('');
-  app.innerHTML='<section class="view"><p class="eyebrow">Dein Tag, ganze Woche</p><h2 class="section">Wochenplan</h2><p class="lead">Frühstück und Mittag gelten für die ganze Woche, das Abendessen wechselt täglich – zusammen rund 2100 kcal am Tag. Mit „↷" verschiebst du einzelne Mahlzeiten: Das Abendessen rutscht (mit allen folgenden) einen Tag nach hinten, Frühstück und Mittag werden für den Tag ausgesetzt. Mit „⇄" tauschst du zwei Abendessen direkt (z. B. Pizza am Sonntag statt Samstag). Alles, was du nicht verschiebst, gilt automatisch als gegessen.</p><div class="grid days">'+cards+'</div></section>';
+  app.innerHTML='<section class="view"><p class="eyebrow">Dein Tag, ganze Woche</p><h2 class="section">Wochenplan</h2><p class="lead">Frühstück und Mittag gelten für die ganze Woche, das Abendessen wechselt täglich – zusammen rund 2100 kcal am Tag. Mit „↷" verschiebst du einzelne Mahlzeiten: Das Abendessen rutscht (mit allen folgenden) einen Tag nach hinten, Frühstück und Mittag werden für den Tag ausgesetzt. Tage komplett tauschen (z. B. Pizza am Sonntag statt Samstag) geht unter „Plan bearbeiten". Alles, was du nicht verschiebst, gilt automatisch als gegessen.</p><div class="grid days">'+cards+'</div></section>';
   app.querySelectorAll('[data-cook]').forEach(x=>x.onclick=()=>{cookCurrent=x.dataset.cook; switchView('cook');});
   app.querySelectorAll('[data-shift]').forEach(x=>x.onclick=async()=>{await shiftFrom(x.dataset.shift); toast('Abendessen verschoben ↷'); renderPlan();});
-  app.querySelectorAll('[data-unshift]').forEach(x=>x.onclick=async()=>{await unshiftFrom(x.dataset.unshift); toast('Verschiebung aufgehoben'); renderPlan();});
-  app.querySelectorAll('[data-swap]').forEach(s=>s.onchange=async()=>{if(!s.value)return; await swapDinner(s.dataset.swap,s.value); toast('Abendessen getauscht ⇄'); renderPlan();});
-  app.querySelectorAll('[data-skipslot]').forEach(x=>x.onclick=async()=>{const p=x.dataset.skipslot.split('|'), dt=p[0], s=p[1];
+  app.querySelectorAll('[data-unshift]').forEach(x=>x.onclick=async()=>{await unshiftFrom(x.dataset.unshift); toast('Verschiebung aufgehoben'); renderPlan();});  app.querySelectorAll('[data-skipslot]').forEach(x=>x.onclick=async()=>{const p=x.dataset.skipslot.split('|'), dt=p[0], s=p[1];
     slotskips[dt]=slotskips[dt]||{};
     if(slotskips[dt][s]) delete slotskips[dt][s]; else slotskips[dt][s]=true;
     if(!Object.keys(slotskips[dt]).length) delete slotskips[dt];
@@ -369,13 +365,17 @@ function renderCreate(){
   validateDraft();
   const bf=BREAKFASTS.map(id=>optCard(id)).join('');
   const lu=LUNCHES.map(id=>optCard(id)).join('');
-  const dn=DAYS.map((day,i)=>'<div class="daygroup"><h3><span class="num">'+(i+1)+'</span>'+day+'</h3><div class="opts">'+optionsFor(day,i).map(id=>optCard(id,day)).join('')+'</div></div>').join('');
-  app.innerHTML='<section class="view"><p class="eyebrow">Plan zusammenstellen</p><h2 class="section">Plan bearbeiten</h2><p class="lead">Wähle dein Frühstück und Mittagessen für die Woche und pro Tag ein Abendessen. Wählst du ein Meal-Prep-taugliches Gericht, erscheint an den zwei Folgetagen sofort eine „(Meal-Prep)"-Option zum Aufwärmen. Gespeichert wird auf der Website – deine Auswahl gilt auf allen Geräten.</p>'
+  const swapSel=(day)=>'<select data-swapday="'+day+'" title="Abendessen mit einem anderen Tag tauschen" style="margin-left:auto;font-family:var(--body);font-size:13px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--muted)"><option value="">⇄ Tauschen mit …</option>'+DAYS.filter(x=>x!==day).map(x=>'<option value="'+x+'">'+x+'</option>').join('')+'</select>';
+  const dn=DAYS.map((day,i)=>'<div class="daygroup"><h3 style="display:flex;align-items:center;gap:8px"><span class="num">'+(i+1)+'</span>'+day+swapSel(day)+'</h3><div class="opts">'+optionsFor(day,i).map(id=>optCard(id,day)).join('')+'</div></div>').join('');
+  app.innerHTML='<section class="view"><p class="eyebrow">Plan zusammenstellen</p><h2 class="section">Plan bearbeiten</h2><p class="lead">Wähle dein Frühstück und Mittagessen für die Woche und pro Tag ein Abendessen. Mit „⇄ Tauschen" neben dem Wochentag tauschst du zwei Abendessen (z. B. Pizza am Sonntag statt Samstag) – danach „Plan speichern". Wählst du ein Meal-Prep-taugliches Gericht, erscheint an den zwei Folgetagen sofort eine „(Meal-Prep)"-Option zum Aufwärmen. Gespeichert wird auf der Website – deine Auswahl gilt auf allen Geräten.</p>'
     +'<div class="generate"><div class="gtxt"><h3>✨ Neue Woche von Claude</h3><p>Lässt Claude sieben komplett neue, gesunde und günstige Abendessen (~850 kcal) für dich entwerfen.</p></div><button class="btn primary" id="genBtn">Neue Woche generieren</button></div>'
     +'<div class="blocklbl">🌅 Frühstück (ganze Woche)</div><div class="opts">'+bf+'</div><div class="blocklbl">🥗 Mittagessen (ganze Woche)</div><div class="opts">'+lu+'</div><div class="blocklbl">🍽️ Abendessen (pro Tag)</div>'+dn
     +'<div class="savebar"><span class="note" id="draftnote"></span><div style="display:flex;gap:10px"><button class="btn" id="resetDraft">Zurücksetzen</button><button class="btn primary" id="saveDraft">Plan speichern</button></div></div></section>';
   app.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{ const id=o.dataset.id; if(o.dataset.day) draft.dinners[o.dataset.day]=id; else if(o.dataset.pick==='b') draft.breakfast=id; else draft.lunch=id; const y=window.scrollY; renderCreate(); window.scrollTo(0,y); });
   app.querySelectorAll('[data-tgl]').forEach(b=>b.onclick=(ev)=>{ev.stopPropagation(); const l=b.nextElementSibling; l.hidden=!l.hidden; b.textContent=l.hidden?'Zutaten ▾':'Zutaten ▴';});
+  app.querySelectorAll('[data-swapday]').forEach(s=>s.onchange=()=>{ if(!s.value) return; const a=s.dataset.swapday, b=s.value;
+    const tmp=draft.dinners[a]; draft.dinners[a]=draft.dinners[b]; draft.dinners[b]=tmp;
+    const y=window.scrollY; renderCreate(); window.scrollTo(0,y); toast(a+' ⇄ '+b+' getauscht – „Plan speichern" nicht vergessen'); });
   app.querySelectorAll('.opt').forEach(o=>o.onkeydown=(ev)=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault(); o.click();}});
   app.querySelector('#resetDraft').onclick=()=>{ draft={dinners:Object.assign({},DEFAULT_DINNERS),breakfast:'b-pancakes',lunch:'l-bowl'}; renderCreate(); };
   app.querySelector('#saveDraft').onclick=async()=>{
@@ -450,12 +450,6 @@ async function unshiftFrom(d){
   let cur=d, next=addDays(d,1);
   while(overrides[next]&&overrides[next]!=='skip'){ overrides[cur]=overrides[next]; delete overrides[next]; cur=next; next=addDays(next,1); }
   Object.keys(overrides).forEach(k=>{ if(overrides[k]!=='skip'&&overrides[k]===plan.dinners[dayNameOf(k)]) delete overrides[k]; });
-  await store('overrides_v1',overrides);
-}
-async function swapDinner(a,b){
-  const ia=dinnerIdFor(a), ib=dinnerIdFor(b);
-  overrides[a]=ib||'skip'; overrides[b]=ia||'skip';
-  [a,b].forEach(k=>{ if(overrides[k]!=='skip'&&overrides[k]===plan.dinners[dayNameOf(k)]) delete overrides[k]; });
   await store('overrides_v1',overrides);
 }
 function slotDishId(s,date){return s==='b'?plan.breakfast:(s==='l'?plan.lunch:dinnerIdFor(date||todayISO()));}
