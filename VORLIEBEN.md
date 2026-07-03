@@ -40,8 +40,14 @@
 - **Verschobene Gerichte beachten:** Die App hat eine „↷ Verschieben"-Funktion (overrides unter `/api/store?key=overrides_v1`, Datum→Gericht-ID bzw. `skip`). Ragt ein verschobenes Gericht in die neue Woche (z. B. Sonntag→Montag), beginnt der neue Plan erst am Tag danach (z. B. Dienstag) – geplant wird trotzdem immer nur bis Sonntag.
 - Neuen Plan per `PUT /api/store?key=plan_v4` speichern (Format: `{dinners:{Montag:'id',…},breakfast:'id',lunch:'id'}`), neue Gerichte zusätzlich nach `custom_v4` (id→Gericht-Objekt, ids mit `gen-` Präfix).
 
+## Rezept-Herkunft
+- **Rezepte nicht selbst ausdenken, sondern aus dem Internet übernehmen** – möglichst gut und oft bewertete Rezepte (z. B. Chefkoch, EAT SMARTER, TheMealDB o. ä.), an Portionsgröße/Budget/Nährwerte angepasst.
+- **Ausnahme:** simple, allgemein bekannte Gerichte ohne nennenswerte Rezeptvarianz (z. B. Pizza, Milchreis) – dafür braucht es keine Quellensuche.
+- **Fotos direkt von der Rezeptquelle übernehmen**, wenn lizenzrechtlich/technisch möglich (Bild muss erreichbar sein und zum Gericht passen); sonst wie gehabt auf TheMealDB/Wikipedia zurückfallen.
+
 ## Bei jedem neuen Plan
 - **Möglichst komplett neue Gerichte ausdenken**, bisherige nicht wiederholen (auch der „Neue Woche generieren"-Button übergibt die Liste bisheriger Gerichte zum Ausschließen).
+- **Vorräte auch bei internetbasierten Rezepten möglichst nutzen**: passende Rezepte so auswählen/anpassen, dass vorhandene Vorräte aufgebraucht werden – Nährwerte, Gesundheit und alle anderen Vorgaben bleiben dabei unverändert gültig.
 - **Nach jeder Plan-Änderung immer prüfen:** (1) die Einkaufsliste – keine Duplikate durch Schreibvarianten, alle Mengen in real existierenden Rewe/Netto-Packungsgrößen; (2) die Kochschritte – detailliert und ohne vage Angaben (siehe „Kochen"). Beides gehört fest zur Abnahme, bevor der Plan als fertig gilt.
 - **Fotos müssen zum Gericht passen und erreichbar sein**: nur verifizierte URLs (TheMealDB `themealdb.com/images/media/meals/…` oder direkte `upload.wikimedia.org`-Thumbnails, KEINE `Special:FilePath`-Redirects – die werden bei vielen Bildern gedrosselt und laden dann nicht).
 
