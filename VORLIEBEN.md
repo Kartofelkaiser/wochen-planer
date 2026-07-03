@@ -36,7 +36,7 @@
 
 ## Plan-Länge & Ausnahmen
 - Standard: Plan geht **Montag bis Sonntag** (7 Tage).
-- **Auf Wunsch kann ein Plan ausnahmsweise länger als 7 Tage gehen** (z. B. ab heute bis Sonntag nächster Woche). Technisch: bereits geplante Tage der laufenden Woche werden über `plan.byDate` (Datum→Gericht-ID in `plan_v4`) fixiert, `plan.dinners` trägt die neue Woche, und die Plan-Seite zeigt dann automatisch bis zum Ende der nächsten Woche an. Fixierte Tage sind mit „📌 fixiert" markiert. Solche Verlängerungen gelten nur einmalig, danach wieder Standard.
+- **Auf Wunsch kann ein Plan ausnahmsweise länger als 7 Tage gehen** (z. B. ab heute bis Sonntag nächster Woche). Technisch: bereits geplante Tage der laufenden Woche werden über `plan.byDate` (Datum→Gericht-ID in `plan_v4`) fixiert, `plan.dinners` trägt die neue Woche, und Plan-Seite, Koch-Modus **und** „Plan bearbeiten" zeigen dann automatisch alle Tage bis zum Ende der nächsten Woche (fixierte Tage mit „📌 fixiert" markiert, in „Plan bearbeiten" als eigener nicht-klickbarer Block oben). Solche Verlängerungen gelten nur einmalig, danach wieder Standard.
 - **Einmalig angewendet am 03.07.2026:** Plan von Fr 03.07. bis So 12.07.2026 (10 Tage); Sa 04.07. und So 05.07. blieben unverändert fixiert.
 
 ## Wöchentliche Routine (samstags morgens)
@@ -46,9 +46,10 @@
 - Neuen Plan per `PUT /api/store?key=plan_v4` speichern (Format: `{dinners:{Montag:'id',…},breakfast:'id',lunch:'id'}`), neue Gerichte zusätzlich nach `custom_v4` (id→Gericht-Objekt, ids mit `gen-` Präfix).
 
 ## Rezept-Herkunft
-- **Rezepte nicht selbst ausdenken, sondern aus dem Internet übernehmen** – möglichst gut und oft bewertete Rezepte (z. B. Chefkoch, EAT SMARTER, TheMealDB o. ä.), an Portionsgröße/Budget/Nährwerte angepasst.
-- **Ausnahme:** simple, allgemein bekannte Gerichte ohne nennenswerte Rezeptvarianz (z. B. Pizza, Milchreis) – dafür braucht es keine Quellensuche.
-- **Fotos direkt von der Rezeptquelle übernehmen**, wenn lizenzrechtlich/technisch möglich (Bild muss erreichbar sein und zum Gericht passen); sonst wie gehabt auf TheMealDB/Wikipedia zurückfallen.
+- **Rezepte nicht selbst ausdenken, sondern aus dem Internet übernehmen** – möglichst gut und oft bewertete Rezepte (z. B. Chefkoch, EAT SMARTER, kochbar, gaumenfreundin o. ä.), an Portionsgröße/Budget/Nährwerte angepasst. **Gilt für ALLE Mahlzeiten: Frühstück, Mittag- und Abendessen.**
+- Jedes Internet-Gericht bekommt im Gericht-Objekt ein `src`-Feld mit Quellenangabe.
+- **Ausnahme:** simple, allgemein bekannte Gerichte ohne nennenswerte Rezeptvarianz (z. B. Pizza, Milchreis, Rührei, Frikadellen, Käsespätzle) – dafür braucht es keine Quellensuche.
+- **Fotos direkt von der Rezeptquelle übernehmen**, wenn lizenzrechtlich/technisch möglich (Bild muss erreichbar sein und zum Gericht passen); sonst TheMealDB/Wikipedia. Nur verifizierte URLs verwenden; wenn keine Verifikation möglich ist (z. B. Cloud-Session ohne Bild-Zugriff), lieber die eingebaute Illustration lassen als eine ungeprüfte/unpassende URL einzutragen – Foto beim nächsten Mal mit Verifikationsmöglichkeit nachtragen. Die App entfernt kaputte Bilder automatisch (onerror-Fallback auf Illustration).
 
 ## Bei jedem neuen Plan
 - **Möglichst komplett neue Gerichte ausdenken**, bisherige nicht wiederholen (auch der „Neue Woche generieren"-Button übergibt die Liste bisheriger Gerichte zum Ausschließen).
