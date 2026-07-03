@@ -37,7 +37,7 @@
 ## Plan-Länge & Ausnahmen
 - Standard: Plan geht **Montag bis Sonntag** (7 Tage).
 - **Auf Wunsch kann ein Plan ausnahmsweise länger als 7 Tage gehen** (z. B. ab heute bis Sonntag nächster Woche). Technisch: bereits geplante Tage der laufenden Woche werden über `plan.byDate` (Datum→Gericht-ID in `plan_v4`) fixiert, `plan.dinners` trägt die neue Woche, und Plan-Seite, Koch-Modus **und** „Plan bearbeiten" zeigen dann automatisch alle Tage bis zum Ende der nächsten Woche (fixierte Tage mit „📌 fixiert" markiert, in „Plan bearbeiten" als eigener nicht-klickbarer Block oben). Solche Verlängerungen gelten nur einmalig, danach wieder Standard.
-- **Einmalig angewendet am 03.07.2026:** Plan von Fr 03.07. bis So 12.07.2026 (10 Tage); Sa 04.07. und So 05.07. blieben unverändert fixiert.
+- **Einmalig angewendet am 03.07.2026:** Plan von Fr 03.07. bis So 12.07.2026 (10 Tage); Sa 04.07. und So 05.07. blieben unverändert fixiert. Fixierte Tage sind in „Plan bearbeiten" über ein Dropdown korrigierbar (falls die automatische Übernahme nicht Maiks tatsächliche Gerichte getroffen hat – die Cloud-Session kann den Live-Speicher nicht lesen).
 
 ## Wöchentliche Routine (samstags morgens)
 - Jeden **Samstagmorgen** wird der Plan für die **kommende Woche (bis Sonntag)** erstellt.
@@ -48,8 +48,8 @@
 ## Rezept-Herkunft
 - **Rezepte nicht selbst ausdenken, sondern aus dem Internet übernehmen** – möglichst gut und oft bewertete Rezepte (z. B. Chefkoch, EAT SMARTER, kochbar, gaumenfreundin o. ä.), an Portionsgröße/Budget/Nährwerte angepasst. **Gilt für ALLE Mahlzeiten: Frühstück, Mittag- und Abendessen.**
 - Jedes Internet-Gericht bekommt im Gericht-Objekt ein `src`-Feld mit Quellenangabe.
-- **Ausnahme:** simple, allgemein bekannte Gerichte ohne nennenswerte Rezeptvarianz (z. B. Pizza, Milchreis, Rührei, Frikadellen, Käsespätzle) – dafür braucht es keine Quellensuche.
-- **Fotos direkt von der Rezeptquelle übernehmen**, wenn lizenzrechtlich/technisch möglich (Bild muss erreichbar sein und zum Gericht passen); sonst TheMealDB/Wikipedia. Nur verifizierte URLs verwenden; wenn keine Verifikation möglich ist (z. B. Cloud-Session ohne Bild-Zugriff), lieber die eingebaute Illustration lassen als eine ungeprüfte/unpassende URL einzutragen – Foto beim nächsten Mal mit Verifikationsmöglichkeit nachtragen. Die App entfernt kaputte Bilder automatisch (onerror-Fallback auf Illustration).
+- **Ausnahme (eng gefasst!):** NUR Pizza, Milchreis und simples Frühstück (z. B. Brot mit Käse, Rührei) brauchen keine Quellensuche. Bolognese, Chili con Carne, Frikadellen, Käsespätzle usw. zählen für Maik NICHT als Klassiker – dafür immer ein echtes Internet-Rezept nehmen.
+- **Fotos: immer mitliefern, am besten direkt aus dem Rezept/der Quelle.** Rezepte bevorzugt so aussuchen, dass ein Foto verfügbar ist (TheMealDB liefert z. B. immer Bilder). Vorab-Verifikation der URL ist NICHT nötig (ausdrücklich von Maik so entschieden) – die App entfernt kaputte Bilder automatisch (onerror-Fallback auf die Illustration). Motiv muss zum Gericht passen.
 
 ## Bei jedem neuen Plan
 - **Möglichst komplett neue Gerichte ausdenken**, bisherige nicht wiederholen (auch der „Neue Woche generieren"-Button übergibt die Liste bisheriger Gerichte zum Ausschließen).
