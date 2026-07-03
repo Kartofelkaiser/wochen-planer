@@ -9,8 +9,8 @@
 - Der Plan soll gesund und abwechslungsreich sein.
 
 ## Plan-Struktur (immer so)
-- **5 Auswahlmöglichkeiten Frühstück**, **5 Mittagessen** (gelten jeweils für die ganze Woche).
-- **4 verschiedene echte Hauptgerichte pro Wochentag** (keine Reste-Einträge als feste Optionen).
+- **5 Auswahlmöglichkeiten Frühstück**, **5 Mittagessen** (gelten jeweils für die ganze Woche). Die **Milchreis-Frühstücksoption bleibt immer erhalten**.
+- **3 verschiedene echte Hauptgerichte pro Wochentag** als Auswahl (seit 03.07.2026, vorher 4; keine Reste-Einträge als feste Optionen) – das gilt auch, wenn die Gerichte aus Internet-Rezepten stammen.
 - **Meal-Prep dynamisch:** Wählt Maik in „Plan bearbeiten" ein Meal-Prep-taugliches Gericht (`prep:true` oder `batch`), erscheint an den 2 Folgetagen sofort (vor dem Speichern) automatisch eine „(Meal-Prep)"-Option zum Aufwärmen – zieht sich durch alle Tage. Diese Optionen erscheinen erst NACH Auswahl des Basisgerichts, nie vorher.
 
 ## Budget
@@ -33,6 +33,11 @@
 - Maik ist **Koch-Anfänger**: Zubereitungsschritte detailliert schreiben – konkrete Würzmengen (z. B. „½ TL Salz, 1 TL Paprikapulver"), Hitzestufen, Garzeiten und Woran-erkenne-ich-dass-es-fertig-ist-Hinweise.
 - **Meal-Prep = doppelte Portion, automatisch gerechnet:** Ist ein Gericht an einem späteren Tag als „(Meal-Prep)" eingeplant, zeigt der Koch-Modus beim Basisgericht alle Zutatenmengen bereits **×2** an (Kopf: „2 Portionen (inkl. Meal-Prep)", kleine Notiz „×2 – Meal-Prep einberechnet" bei den Zutaten) plus Hinweis-Box; die Einkaufsliste rechnet die doppelten Zutaten ebenfalls ein. Bei neuen Gerichten/Plänen immer daran denken.
 - **Keine vagen Angaben** wie „Salat mit Öl-Dressing dazu": immer ausschreiben, welcher Salat (z. B. „2 Handvoll Blattsalat") und welches Dressing mit Mengen (z. B. „1 EL Öl, 1 TL Essig, 1 Prise Salz und Zucker"). Gilt für alle Beilagen, Dips und Dressings.
+
+## Plan-Länge & Ausnahmen
+- Standard: Plan geht **Montag bis Sonntag** (7 Tage).
+- **Auf Wunsch kann ein Plan ausnahmsweise länger als 7 Tage gehen** (z. B. ab heute bis Sonntag nächster Woche). Technisch: bereits geplante Tage der laufenden Woche werden über `plan.byDate` (Datum→Gericht-ID in `plan_v4`) fixiert, `plan.dinners` trägt die neue Woche, und die Plan-Seite zeigt dann automatisch bis zum Ende der nächsten Woche an. Fixierte Tage sind mit „📌 fixiert" markiert. Solche Verlängerungen gelten nur einmalig, danach wieder Standard.
+- **Einmalig angewendet am 03.07.2026:** Plan von Fr 03.07. bis So 12.07.2026 (10 Tage); Sa 04.07. und So 05.07. blieben unverändert fixiert.
 
 ## Wöchentliche Routine (samstags morgens)
 - Jeden **Samstagmorgen** wird der Plan für die **kommende Woche (bis Sonntag)** erstellt.
@@ -68,7 +73,7 @@
 - **Repo:** https://github.com/Kartofelkaiser/wochen-planer · lokaler Klon: `~/Desktop/Claude/wochen-planer` (Push-Token ist dort in der Git-Remote-URL konfiguriert – Token niemals in Dateien/Chats schreiben!)
 - **Alles ist eine Datei:** `index.html` (Gerichte im `DISHES`-Objekt, UI, Logik). Dazu `netlify/functions/store.mjs` (Speicher) und `claude.mjs` (Claude-Proxy).
 - **Speicher-API** (offen, kein Token): `GET/PUT https://wochen-planer.netlify.app/api/store?key=<key>` mit JSON-Body. Schlüssel:
-  - `plan_v4` – aktueller Plan `{dinners:{Montag:'id',…,Sonntag:'id'},breakfast:'id',lunch:'id'}`
+  - `plan_v4` – aktueller Plan `{dinners:{Montag:'id',…,Sonntag:'id'},breakfast:'id',lunch:'id',byDate?:{'YYYY-MM-DD':'id'}}` – `byDate` fixiert einzelne Datums-Tage (hat Vorrang vor dem Wochentag, aber nicht vor overrides; alte Einträge werden automatisch aufgeräumt)
   - `custom_v4` – dynamische Gerichte (id→Objekt, Präfixe `gen-`/`prep-`)
   - `pantry_v1` – Vorräte `{ "item|einheit": {item,unit,qty,ts} }`
   - `overrides_v1` – verschobene Abendessen (Datum→Gericht-ID bzw. `'skip'`)
