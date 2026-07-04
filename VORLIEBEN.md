@@ -47,7 +47,7 @@
 
 ## Rezept-Herkunft
 - **Rezepte nicht selbst ausdenken, sondern aus dem Internet übernehmen** – möglichst gut und oft bewertete Rezepte (z. B. Chefkoch, EAT SMARTER, kochbar, gaumenfreundin o. ä.), an Portionsgröße/Budget/Nährwerte angepasst. **Gilt für ALLE Mahlzeiten: Frühstück, Mittag- und Abendessen.**
-- Jedes Internet-Gericht bekommt im Gericht-Objekt ein `src`-Feld mit Quellenangabe.
+- Jedes Internet-Gericht bekommt im Gericht-Objekt ein `src`-Feld mit Quellenangabe – **die Quelle wird in „Plan bearbeiten" auf jeder Gerichte-Karte angezeigt** (📖-Zeile).
 - **Ausnahme (eng gefasst!):** NUR Pizza, Milchreis und simples Frühstück (z. B. Brot mit Käse, Rührei) brauchen keine Quellensuche. Bolognese, Chili con Carne, Frikadellen, Käsespätzle usw. zählen für Maik NICHT als Klassiker – dafür immer ein echtes Internet-Rezept nehmen.
 - **Fotos: immer mitliefern, am besten direkt aus dem Rezept/der Quelle.** Rezepte bevorzugt so aussuchen, dass ein Foto verfügbar ist (TheMealDB liefert z. B. immer Bilder). Vorab-Verifikation der URL ist NICHT nötig (ausdrücklich von Maik so entschieden) – die App entfernt kaputte Bilder automatisch (onerror-Fallback auf die Illustration). Motiv muss zum Gericht passen.
 
@@ -89,6 +89,7 @@
 
 ## Aktueller Stand (04.07.2026)
 - Wochenplan Mo 06.07.–So 12.07.: Mo Kartoffel-Hähnchen-Auflauf · Di Hähnchen-Paprika-Curry · Mi Kartoffel-Quark-Auflauf · Do Nudel-Hähnchen-Gratin · Fr Pizza Margherita · Sa Kartoffelpuffer mit Apfelmus · So Linsen-Kartoffel-Eintopf (alle mit Quelle & Foto; 3 Optionen/Tag).
-- Maiks Einkauf vom 03.07. wurde automatisch in die Vorräte übernommen (`plan.pantrySeeded`-Flag; Kartoffeln 1800 g, Hähnchenbrust 700 g, Milch 700 ml, Käse gerieben 380 g, Magerquark 500 g, Apfelmus 710 g, Milchreis 500 g) – Einkaufsliste zieht das automatisch ab.
+- Maiks Einkauf vom 03.07. wurde automatisch in die Vorräte übernommen (`plan.pantrySeeded='v2'`: Werte werden exakt GESETZT, nicht addiert – verhindert Doppelzählung mit manuellen Einträgen; Kartoffeln 1800 g, Hähnchenbrust 700 g, Milch 700 ml, Käse gerieben 380 g, Magerquark 500 g, Apfelmus 710 g, Milchreis 500 g = Einkauf minus Donnerstags-Gratin in doppelter Meal-Prep-Portion) – Einkaufsliste zieht das automatisch ab.
+- **Einkaufsliste und „Plan bearbeiten" haben einen Wochen-Umschalter** („Diese Woche (ab heute)" / „Nächste Woche"), damit sich die Wochen nicht vermischen; die Einkaufsliste startet auf „Diese Woche".
 
 *Stand: 2026-07-04*
