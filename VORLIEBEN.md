@@ -87,4 +87,8 @@
 ## Fertiger Routine-Text (zum Kopieren)
 > Erstelle den Essensplan für die kommende Woche (Montag bis Sonntag) für die App „Wochenplan" (https://wochen-planer.netlify.app). Halte dich exakt an dieses Dokument (Vorgaben oben): ~2100 kcal/Tag, 5 Frühstücke, 5 Mittagessen, 4 echte Abendessen pro Tag, günstig, Preise, neue Gerichte, detaillierte Anfänger-Kochschritte, verifizierte Fotos. Lies vorher per GET auf die Speicher-API: `pantry_v1` (Vorräte möglichst aufbrauchen), `overrides_v1` und `slotskips_v1` (ragt ein verschobenes Gericht in die neue Woche, beginnt der neue Plan erst am Tag danach). Speichere den fertigen Plan per PUT auf `plan_v4`, neue Gerichte nach `custom_v4`. Fasse am Ende kurz zusammen, was es diese Woche gibt und was es ungefähr kostet.
 
-*Stand: 2026-07-02*
+## Aktueller Stand (04.07.2026)
+- Wochenplan Mo 06.07.–So 12.07.: Mo Kartoffel-Hähnchen-Auflauf · Di Hähnchen-Paprika-Curry · Mi Kartoffel-Quark-Auflauf · Do Nudel-Hähnchen-Gratin · Fr Pizza Margherita · Sa Kartoffelpuffer mit Apfelmus · So Linsen-Kartoffel-Eintopf (alle mit Quelle & Foto; 3 Optionen/Tag).
+- Maiks Einkauf vom 03.07. wurde automatisch in die Vorräte übernommen (`plan.pantrySeeded`-Flag; Kartoffeln 1800 g, Hähnchenbrust 700 g, Milch 700 ml, Käse gerieben 380 g, Magerquark 500 g, Apfelmus 710 g, Milchreis 500 g) – Einkaufsliste zieht das automatisch ab.
+
+*Stand: 2026-07-04*
